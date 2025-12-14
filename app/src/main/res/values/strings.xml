@@ -1,6 +1,6 @@
 <resources>
     <!--Home Screen-->
-    <string name="shortcut_default">App</string>
+    <string name="shortcut_default">Long press to add an app</string>
 
     <string name="shortcut_default_click">Long click to select an app</string>
 

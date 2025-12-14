@@ -1,6 +1,6 @@
 <resources>
     <!--Home Screen-->
-    <string name="shortcut_default">App</string>
+    <string name="shortcut_default">Lange drücken, um eine App hinzuzufügen</string>
 
     <string name="shortcut_default_click">Gedrückt halten zum Wählen einer App</string>
 

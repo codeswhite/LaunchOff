@@ -1,6 +1,6 @@
 <resources>
     <!--Home Screen-->
-    <string name="shortcut_default">Sovellus</string>
+    <string name="shortcut_default">Paina pitkään lisätäksesi sovelluksen</string>
 
     <string name="shortcut_default_click">Paina pitkään valitaksesi sovelluksen</string>
 

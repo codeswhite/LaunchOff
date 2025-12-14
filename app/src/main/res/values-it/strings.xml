@@ -2,7 +2,7 @@
     <string name="empty"></string>
 
     <!--Home Screen-->
-    <string name="shortcut_default">App</string>
+    <string name="shortcut_default">Tocca e tieni premuto per aggiungere un\'app</string>
 
     <string name="shortcut_default_click">Tocca e tieni premuto per selezionare un\'app</string>
 
