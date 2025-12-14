@@ -67,6 +67,7 @@ import eu.ottop.yamlauncher.utils.StringUtils
 import eu.ottop.yamlauncher.utils.UIUtils
 import eu.ottop.yamlauncher.utils.WeatherSystem
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -114,6 +115,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var binding: ActivityMainBinding
     private lateinit var launcherApps: LauncherApps
     private lateinit var installedApps: List<Triple<LauncherActivityInfo, UserHandle, Int>>
+    private var filteredAppsCache: List<Triple<LauncherActivityInfo, UserHandle, Int>> = listOf()
 
     private lateinit var preferences: SharedPreferences
 
@@ -122,6 +124,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private var isInitialOpen = false
     private var canLaunchShortcut = true
     private var showHidden = false
+    private var searchJob: Job? = null
 
     private var swipeThreshold = 100
     private var swipeVelocityThreshold = 100
@@ -842,6 +845,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     updateMenu(updatedApps)
 
                     installedApps = updatedApps
+                    // Update the cache when the app list changes
+                    filteredAppsCache = updatedApps
                 }
             }
         } catch (_: UninitializedPropertyAccessException) {
@@ -979,8 +984,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun setAppViewDetails() {
-        lifecycleScope.launch(Dispatchers.Default) {
-            filterItems(searchView.text.toString())
+        lifecycleScope.launch {
+            // Cancel any ongoing search job when switching views
+            searchJob?.cancel()
+            withContext(Dispatchers.Default) {
+                filterItems(searchView.text.toString())
+            }
         }
         searchSwitcher.setImageDrawable(
             ResourcesCompat.getDrawable(
@@ -993,8 +1002,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun setContactViewDetails() {
-        lifecycleScope.launch(Dispatchers.Default) {
-            filterItems(searchView.text.toString())
+        lifecycleScope.launch {
+            // Cancel any ongoing search job when switching views
+            searchJob?.cancel()
+            withContext(Dispatchers.Default) {
+                filterItems(searchView.text.toString())
+            }
         }
         searchSwitcher.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.apps_24px, null))
         searchSwitcher.contentDescription = getString(R.string.switch_to_apps)
@@ -1062,12 +1075,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+                // Cancel previous search job to implement debouncing
+                searchJob?.cancel()
             }
 
             override fun afterTextChanged(s: Editable?) {
-                lifecycleScope.launch(Dispatchers.Default) {
-                    filterItems(s.toString())
+                searchJob = lifecycleScope.launch {
+                    delay(300) // 300ms debounce delay
+                    withContext(Dispatchers.Default) {
+                        filterItems(s.toString())
+                    }
                 }
             }
         })
@@ -1078,8 +1095,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         when (menuView.displayedChild) {
             0 -> {
                 val newFilteredApps = mutableListOf<Triple<LauncherActivityInfo, UserHandle, Int>>()
-                val updatedApps = appUtils.getInstalledApps(showHidden)
-                val filteredApps = getFilteredApps(cleanQuery, newFilteredApps, updatedApps)
+                // Use cached installed apps for filtering instead of retrieving from system each time
+                val appsToFilter = if (cleanQuery.isNullOrEmpty()) installedApps else filteredAppsCache
+                val filteredApps = getFilteredApps(cleanQuery, newFilteredApps, appsToFilter)
                 if (filteredApps != null) {
                     applySearchFilter(filteredApps)
                 }
@@ -1100,7 +1118,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     ): List<Triple<LauncherActivityInfo, UserHandle, Int>>? {
         if (cleanQuery.isNullOrEmpty()) {
             isJobActive = true
-            updateMenu(updatedApps)
+            updateMenu(installedApps) // Use the original installed apps list
+            filteredAppsCache = installedApps // Reset cache to full list
             return null
         } else {
             isJobActive = false
@@ -1111,24 +1130,25 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 null
             }
 
-            updatedApps.forEach {
+            // Use Kotlin's filter method for better performance and readability
+            val filteredList = updatedApps.filter { appItem ->
                 val cleanItemText = stringUtils.cleanString(
                     sharedPreferenceManager.getAppName(
-                        it.first.componentName.flattenToString(),
-                        it.third,
-                        it.first.label
+                        appItem.first.componentName.flattenToString(),
+                        appItem.third,
+                        appItem.first.label
                     ).toString()
                 )
-                if (cleanItemText != null) {
-                    if (
-                        (fuzzyPattern != null && cleanItemText.contains(fuzzyPattern)) ||
-                        (cleanItemText.contains(cleanQuery, ignoreCase = true))
-                    ) {
-                        newFilteredApps.add(it)
-                    }
-                }
+                cleanItemText != null && (
+                    (fuzzyPattern != null && cleanItemText.contains(fuzzyPattern)) ||
+                    cleanItemText.contains(cleanQuery, ignoreCase = true)
+                )
             }
-            return newFilteredApps
+
+            // Cache the filtered results for potential further filtering
+            filteredAppsCache = filteredList
+
+            return filteredList
         }
     }
 
@@ -1142,6 +1162,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     suspend fun applySearch() {
+        // Cancel any ongoing search job
+        searchJob?.cancel()
         withContext(Dispatchers.Default) {
             filterItems(searchView.text.toString())
         }
@@ -1168,6 +1190,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         unregisterBatteryReceiver()
         preferences.unregisterOnSharedPreferenceChangeListener(this)
+        searchJob?.cancel()
     }
 
     override fun onStart() {
