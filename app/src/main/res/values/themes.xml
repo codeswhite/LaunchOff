@@ -16,7 +16,7 @@
 
     <style name="SettingsTheme" parent="Theme.AppCompat">
         <item name="android:windowBackground">@color/settings_bg</item>
-        <item name="android:windowShowWallpaper">false</item>
+        <item name="android:windowShowWallpaper">true</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
