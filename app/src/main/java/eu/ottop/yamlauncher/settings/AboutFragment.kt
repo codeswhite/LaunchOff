@@ -30,20 +30,11 @@ class AboutFragment : Fragment(), TitleProvider {
         val launcherApps = requireActivity().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
 
         // Set up about page links
-        stringUtils.setLink(requireActivity().findViewById(R.id.creditText), getString(R.string.my_website_link))
-        stringUtils.setLink(requireActivity().findViewById(R.id.codebergLink), getString(R.string.codeberg_link))
         stringUtils.setLink(requireActivity().findViewById(R.id.githubLink), getString(R.string.github_link))
-        stringUtils.setLink(requireActivity().findViewById(R.id.weatherLink), getString(R.string.weather_link))
-        stringUtils.setLink(requireActivity().findViewById(R.id.donationTitle), getString(R.string.itsover))
+        stringUtils.setLink(requireActivity().findViewById(R.id.fdroidLink), getString(R.string.fdroid_link))
+        stringUtils.setLink(requireActivity().findViewById(R.id.izzyLink), getString(R.string.izzy_link))
+        stringUtils.setLink(requireActivity().findViewById(R.id.playLink), getString(R.string.play_link))
 
-        requireActivity().findViewById<ImageView>(R.id.iconView).setOnClickListener {
-            launcherApps.startAppDetailsActivity(
-                ComponentName(requireContext(), this::class.java),
-                launcherApps.profiles[0],
-                null,
-                null
-            )
-        }
 
         val currentVersion = "v" + requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0).versionName
         requireActivity().findViewById<TextView>(R.id.version).text = currentVersion

@@ -158,10 +158,14 @@
     <!--About Page Items-->
     <string name="about_title">Informazioni su YAM Launcher</string>
     <string name="app_icon">Icona app</string>
-    <string name="creditName">Di Otto Petäjä</string>
+    <string name="creditName">Creato da Otto, mantenuto da ThomasNow Productions</string>
     <string name="source_code">Codice sorgente</string>
     <string name="codeberg">Codeberg</string>
     <string name="github">GitHub</string>
+    <string name="view_github">Visualizza il progetto su GitHub</string>
+    <string name="install_fdroid">Installa su F-Droid</string>
+    <string name="install_izzy">Installa su IzzyOnDroid</string>
+    <string name="install_play">Installa su Google Play</string>
 
     <string name="weather_data_credit">Dati meteo da Open-Meteo.com\n(CC BY 4.0)</string>
     <!--About page links-->

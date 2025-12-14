@@ -154,10 +154,14 @@
     <!--About Page Items-->
     <string name="about_title">Tietoa YAM Launcherista</string>
     <string name="app_icon">Sovelluksen Icon</string>
-    <string name="creditName">Otto Petäjä</string>
+    <string name="creditName">Luonut Otto, ylläpitää ThomasNow Productions</string>
     <string name="source_code">Lähdekoodi</string>
     <string name="codeberg">Codeberg</string>
     <string name="github">GitHub</string>
+    <string name="view_github">Näytä projekti GitHubissa</string>
+    <string name="install_fdroid">Asenna F-Droidistä</string>
+    <string name="install_izzy">Asenna IzzyOnDroidistä</string>
+    <string name="install_play">Asenna Google Playstä</string>
 
     <string name="reset">Reset</string>
     <string name="restart_text">Käynnistä YAM Launcher Uudelleen</string>
