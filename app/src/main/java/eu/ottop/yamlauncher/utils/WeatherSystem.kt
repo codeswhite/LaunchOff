@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLEncoder
 
 class WeatherSystem(private val context: Context) {
 
@@ -69,7 +70,8 @@ class WeatherSystem(private val context: Context) {
     fun getSearchedLocations(searchTerm: String?) : MutableList<Map<String, String>> {
         val foundLocations = mutableListOf<Map<String, String>>()
 
-        val url = URL("https://geocoding-api.open-meteo.com/v1/search?name=$searchTerm&count=50&language=en&format=json")
+        val encodedSearchTerm = URLEncoder.encode(searchTerm ?: "", "UTF-8")
+        val url = URL("https://geocoding-api.open-meteo.com/v1/search?name=$encodedSearchTerm&count=50&language=en&format=json")
         with(url.openConnection() as HttpURLConnection) {
             requestMethod = "GET"
             try {
