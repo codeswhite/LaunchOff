@@ -1,0 +1,94 @@
+<resources>
+
+    <!--General UI-->
+    <string-array name="bg_options">
+        <item>Прозрачный</item>
+        <item>Черный</item>
+        <item>Серый</item>
+        <item>Белый</item>
+        <item>Material</item>
+    </string-array>
+
+    <string-array name="color_options">
+        <item>Светлый</item>
+        <item>Темный</item>
+        <item>Material</item>
+    </string-array>
+
+    <string-array name="font_options">
+        <item>Системный</item>
+        <item>Arbutus</item>
+        <item>Casual</item>
+        <item>Cursive</item>
+        <item>Monospace</item>
+        <item>Sans Serif</item>
+        <item>Sans Serif Light</item>
+        <item>Sans Serif Thin</item>
+        <item>Sans Serif Condensed</item>
+        <item>Sans Serif Condensed Light</item>
+        <item>Sans Serif Smallcaps</item>
+        <item>Serif</item>
+        <item>Ubuntu</item>
+        <item>Ubuntu Light</item>
+        <item>Ubuntu Condensed Regular</item>
+        <item>Workbench</item>
+    </string-array>
+
+    <string-array name="style_options">
+        <item>Обычный</item>
+        <item>Жирный</item>
+        <item>Курсив</item>
+        <item>Жирный курсив</item>
+    </string-array>
+
+    <!--Home and App Menu-->
+    <string-array name="h_alignment_options">
+        <item>Слева</item>
+        <item>По центру</item>
+        <item>Справа</item>
+    </string-array>
+
+    <string-array name="v_alignment_options">
+        <item>Сверху</item>
+        <item>По центру</item>
+        <item>Снизу</item>
+    </string-array>
+
+    <string-array name="size_options">
+        <item>Крошечный</item>
+        <item>Маленький</item>
+        <item>Средний</item>
+        <item>Большой</item>
+        <item>Очень большой</item>
+        <item>Огромный</item>
+    </string-array>
+
+    <string-array name="shortcut_spacing_options">
+        <item>Крошечный</item>
+        <item>Маленький</item>
+        <item>Средний</item>
+        <item>Большой</item>
+        <item>Очень большой</item>
+        <item>Огромный</item>
+        <item>Сверхогромный</item>
+    </string-array>
+
+    <string-array name="app_spacing_options">
+        <item>Крошечный</item>
+        <item>Маленький</item>
+        <item>Средний</item>
+        <item>Большой</item>
+        <item>Очень большой</item>
+        <item>Огромный</item>
+    </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Ответить</item>
+        <item>Ответить всем</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+</resources>

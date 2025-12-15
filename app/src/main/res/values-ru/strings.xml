@@ -1,0 +1,200 @@
+<resources>
+    <!--Home Screen-->
+    <string name="shortcut_default">Долгое нажатие для добавления приложения</string>
+
+    <string name="shortcut_default_click">Долгое нажатие, чтобы выбрать приложение</string>
+
+    <string name="accessibility_set_shortcut">Установить ярлык приложения</string>
+
+    <string name="open_app_menu">Открыть меню приложений</string>
+
+    <string name="no_calendar_app">Приложение календаря не найдено</string>
+
+    <!--App Menu-->
+    <string name="select_an_app">Выбрать приложение</string>
+
+    <string name="search">Поиск…</string>
+
+    <string name="switch_to_contacts">Переключиться на контакты</string>
+    <string name="switch_to_apps">Переключиться на приложения</string>
+
+    <string name="confirm_title">Подтверждение</string>
+    <string name="app_confirm_text">Вы уверены, что хотите выбрать</string>
+    <string name="confirm_yes">Да</string>
+    <string name="confirm_no">Отмена</string>
+
+    <string name="removing">Удаление…</string>
+
+    <string name="close_app_menu">Закрыть меню приложений</string>
+
+    <string name="launch_error">Не удается запустить приложение</string>
+
+    <string name="empty_rename">Имя не может быть пустым</string>
+
+    <!--Action Menu Items-->
+    <string name="pin">Закрепить</string>
+    <string name="info">Информация</string>
+    <string name="uninstall">Удалить</string>
+    <string name="rename">Переименовать</string>
+    <string name="hide">Скрыть</string>
+    <string name="close">Закрыть</string>
+    <string name="accessibility_pin">Закрепить приложение</string>
+    <string name="accessibility_info">Информация о приложении</string>
+    <string name="accessibility_uninstall">Удалить приложение</string>
+    <string name="accessibility_rename">Переименовать приложение</string>
+    <string name="accessibility_hide">Скрыть приложение</string>
+
+    <!--Settings Page-->
+    <string name="settings_title">Настройки лаунчера</string>
+
+    <string name="default_home">Установить домашнюю страницу по умолчанию</string>
+    <string name="unable_to_launch_settings">Невозможно открыть настройки</string>
+
+    <string name="lock_settings">Заблокировать настройки</string>
+
+    <string name="customization">Персонализация</string>
+
+    <string name="ui_settings_title">Общие настройки интерфейса</string>
+    <string name="ui_settings_text">Общий интерфейс</string>
+    <string name="ui_settings_summary">Настроить общий вид</string>
+
+    <string name="appearance">Внешний вид</string>
+    <string name="background_color">Цвет фона</string>
+    <string name="text_color">Цвет текста</string>
+    <string name="text_font">Шрифт текста</string>
+    <string name="text_style">Стиль текста</string>
+    <string name="text_shadow">Тень текста</string>
+
+    <string name="operation">Операции</string>
+    <string name="animation_speed">Скорость анимации</string>
+    <string name="swipe_threshold">Порог смахивания</string>
+    <string name="swipe_velocity_threshold">Порог скорости смахивания</string>
+    <string name="show_status_bar">Показать строку состояния</string>
+    <string name="enable_confirmation">Диалог подтверждения приложения</string>
+    <string name="launch_confirmation_text">Вы уверены, что хотите запустить это приложение?</string>
+
+    <string name="home_settings_title">Настройки главного экрана</string>
+    <string name="home_settings_text">Главный экран</string>
+    <string name="home_settings_summary">Настроить главный экран</string>
+
+    <string name="clock">Часы</string>
+    <string name="show_clock">Показать часы</string>
+    <string name="clock_alignment">Выравнивание часов</string>
+    <string name="clock_size">Размер часов</string>
+    <string name="clicking_time_opens_clock">Нажатие на время открывает часы</string>
+    <string name="custom_clock_gesture">Пользовательские часы</string>
+    <string name="set_clock_app">Установить приложение часов</string>
+
+    <string name="date">Дата</string>
+    <string name="show_date">Показать дату</string>
+    <string name="date_size">Размер даты</string>
+    <string name="battery_indicator">Индикатор батареи</string>
+    <string name="clicking_date_opens_calendar">Нажатие на дату открывает календарь</string>
+    <string name="custom_date_gesture">Пользовательский календарь</string>
+    <string name="set_calendar_app">Установить приложение календаря</string>
+
+    <string name="weather">Погода</string>
+    <string name="gps_location">Местоположение GPS</string>
+    <string name="latest_location">Последнее местоположение GPS</string>
+    <string name="set_manual_location">Установить местоположение вручную</string>
+    <string name="find_your_city">"Найти ваш город"</string>
+    <string name="units">Единицы измерения</string>
+
+    <string name="shortcuts">Ярлыки</string>
+    <string name="number_of_shortcuts">Количество ярлыков</string>
+    <string name="horizontal_alignment">Горизонтальное выравнивание</string>
+    <string name="vertical_alignment">Вертикальное выравнивание</string>
+    <string name="shortcut_size">Размер ярлыка</string>
+    <string name="shortcut_spacing">Расстояние между ярлыками</string>
+    <string name="lock_shortcuts">Заблокировать ярлыки</string>
+    <string name="hidden_shortcut_title">Скрытые приложения</string>
+    <string name="hidden_shortcuts">Показать скрытые приложения в выборе ярлыков</string>
+
+    <string name="gestures">Жесты</string>
+    <string name="swipe_left">Свайп влево</string>
+    <string name="left_swipe_app">Приложение левого свайпа</string>
+    <string name="swipe_right">Свайп вправо</string>
+    <string name="right_swipe_app">Приложение правого свайпа</string>
+    <string name="double_tap_to_lock_screen">Двойное нажатие для блокировки экрана</string>
+
+    <string name="app_settings_title">Настройки меню приложений</string>
+    <string name="app_settings_text">Меню приложений</string>
+    <string name="app_settings_summary">Настроить меню приложений</string>
+
+    <string name="apps">Приложения</string>
+    <string name="app_alignment">Выравнивание приложений</string>
+    <string name="app_size">Размер приложения</string>
+    <string name="app_spacing">Расстояние между приложениями</string>
+    <string name="contacts_menu">Меню контактов</string>
+    <string name="permission_denied">В разрешении отказано</string>
+    <string name="internet_search">Кнопка веб-поиска</string>
+
+    <string name="context_menu_settings_title">Настройки контекстного меню</string>
+    <string name="context_menu_settings_text">Контекстное меню</string>
+    <string name="context_menu_settings_summary">Включить/выключить элементы контекстного меню</string>
+
+    <string name="enable_pin">Закрепить приложение</string>
+    <string name="enable_info">Информация о приложении</string>
+    <string name="enable_uninstall">Удалить приложение</string>
+    <string name="enable_rename">Переименовать приложение</string>
+    <string name="enable_hide">Скрыть приложение</string>
+    <string name="enable_close">Закрыть меню</string>
+
+    <string name="search_text">Поиск</string>
+    <string name="enable_search">Включить поиск</string>
+    <string name="search_alignment">Выравнивание поиска</string>
+    <string name="search_size">Размер поиска</string>
+    <string name="enable_fuzzy_search">Нечеткий поиск</string>
+    <string name="automatically_open_keyboard">Автоматически открывать клавиатуру</string>
+    <string name="automatic_app_opening">Автоматический запуск приложения</string>
+    <string name="auto_launch_summary">Автоматически запускать приложение, когда оно является последним результатом поиска</string>
+
+    <string name="hidden_apps_title">Скрытые приложения</string>
+    <string name="hidden_apps_text">Управление скрытыми приложениями</string>
+    <string name="hidden_apps_summary">Показать скрытые приложения</string>
+    <string name="hidden_confirm_text">Вы уверены, что хотите показать</string>
+
+    <string name="about">О приложении</string>
+    <!--About Page Items-->
+    <string name="about_title">О YAM Launcher</string>
+    <string name="app_icon">Значок приложения</string>
+    <string name="creditName">создано Отто, поддерживается ThomasNow Productions</string>
+    <string name="source_code">Исходный код</string>
+    <string name="codeberg">Codeberg</string>
+    <string name="github">GitHub</string>
+    <string name="view_github">Посмотреть этот проект на GitHub</string>
+    <string name="install_fdroid">Установить из F-Droid</string>
+    <string name="install_izzy">Установить из IzzyOnDroid</string>
+    <string name="install_play">Установить из Google Play</string>
+
+    <string name="reset">Сбросить</string>
+    <string name="restart_text">Перезапустить YAM Launcher</string>
+    <string name="reset_text">Сбросить все настройки</string>
+    <string name="reset_confirm_text">Вы потеряете ВСЕ изменения, которые вы внесли в настройки лаунчера, ярлыки, скрытые приложения и т.д.\n\nВы уверены?</string>
+
+    <string name="backup_restore">Резервное копирование и восстановление</string>
+    <string name="backup">Резервная копия</string>
+    <string name="backup_summary">Создать резервную копию настроек</string>
+    <string name="restore">Восстановить</string>
+    <string name="restore_summary">Восстановить из резервной копии</string>
+    <string name="backup_success">Резервное копирование выполнено успешно :)</string>
+    <string name="backup_fail">Ошибка резервного копирования :(</string>
+    <string name="restore_success">Восстановление выполнено успешно :)</string>
+    <string name="restore_fail">Ошибка восстановления :( (поврежденный файл?)</string>
+    <string name="restore_wrong_app">Это не резервная копия YAM Launcher</string>
+    <string name="restore_error">Не удалось прочитать файл</string>
+
+    <!--Location Selector Items-->
+    <string name="region_text">%1$s%2$s</string>
+
+    <!--Double tap to lock-->
+    <string name="screenlock_confirmation">Чтобы блокировать двойным нажатием, включите YAM Launcher в настройках специальных возможностей.</string>
+    <string name="accessibility_service_description">Разрешение требуется для работы двойного нажатия для блокировки экрана.\n\nОно нужно только в том случае, если вы хотите использовать функцию двойного нажатия для блокировки экрана в YAM Launcher.</string>
+
+    <string name="text_authentication_cancel">Аутентификация отменена.</string>
+    <string name="text_authentication_error">Ошибка аутентификации: %1$s (код %2$d)</string>
+    <string name="text_authentication_failed">Ошибка аутентификации.</string>
+    <string name="text_biometric_login">Разблокировать настройки YAM Launcher</string>
+    <string name="text_biometric_login_app">Биометрический вход для %1$s</string>
+    <string name="text_biometric_login_sub">Войдите, используя свои биометрические данные.</string>
+</resources>

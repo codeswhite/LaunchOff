@@ -1,0 +1,94 @@
+<resources>
+
+    <!--General UI-->
+    <string-array name="bg_options">
+        <item>Transparent</item>
+        <item>Noir</item>
+        <item>Gris</item>
+        <item>Blanc</item>
+        <item>Material</item>
+    </string-array>
+
+    <string-array name="color_options">
+        <item>Clair</item>
+        <item>Sombre</item>
+        <item>Material</item>
+    </string-array>
+
+    <string-array name="font_options">
+        <item>Système</item>
+        <item>Arbutus</item>
+        <item>Casual</item>
+        <item>Cursive</item>
+        <item>Monospace</item>
+        <item>Sans Serif</item>
+        <item>Sans Serif Light</item>
+        <item>Sans Serif Thin</item>
+        <item>Sans Serif Condensed</item>
+        <item>Sans Serif Condensed Light</item>
+        <item>Sans Serif Smallcaps</item>
+        <item>Serif</item>
+        <item>Ubuntu</item>
+        <item>Ubuntu Light</item>
+        <item>Ubuntu Condensed Regular</item>
+        <item>Workbench</item>
+    </string-array>
+
+    <string-array name="style_options">
+        <item>Normal</item>
+        <item>Gras</item>
+        <item>Italique</item>
+        <item>Gras-Italique</item>
+    </string-array>
+
+    <!--Home and App Menu-->
+    <string-array name="h_alignment_options">
+        <item>Gauche</item>
+        <item>Centré</item>
+        <item>Droite</item>
+    </string-array>
+
+    <string-array name="v_alignment_options">
+        <item>Haut</item>
+        <item>Centre</item>
+        <item>Bas</item>
+    </string-array>
+
+    <string-array name="size_options">
+        <item>Minuscule</item>
+        <item>Petit</item>
+        <item>Moyen</item>
+        <item>Grand</item>
+        <item>Très grand</item>
+        <item>Énorme</item>
+    </string-array>
+
+    <string-array name="shortcut_spacing_options">
+        <item>Minuscule</item>
+        <item>Petit</item>
+        <item>Moyen</item>
+        <item>Grand</item>
+        <item>Très grand</item>
+        <item>Énorme</item>
+        <item>Extra énorme</item>
+    </string-array>
+
+    <string-array name="app_spacing_options">
+        <item>Minuscule</item>
+        <item>Petit</item>
+        <item>Moyen</item>
+        <item>Grand</item>
+        <item>Très grand</item>
+        <item>Énorme</item>
+    </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Répondre</item>
+        <item>Répondre à tous</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+</resources>
