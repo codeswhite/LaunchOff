@@ -1,10 +1,9 @@
 name: Mirror to Codeberg
 
-# Trigger on push to any branch
 on:
   push:
     branches:
-      - '**'
+      - '**'  # trigger on any branch
 
 jobs:
   mirror:
@@ -15,9 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # full history needed for mirror
+          fetch-depth: 0  # full history needed
 
-      # 2️⃣ Push to Codeberg
+      # 2️⃣ Push to Codeberg (safe)
       - name: Push to Codeberg
         env:
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
@@ -25,8 +24,11 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
 
-          # Add Codeberg as remote with token authentication
+          # Add Codeberg remote with token
           git remote add codeberg https://${{ secrets.CODEBERG_TOKEN }}@codeberg.org/ThomasNowProductions/YAM-Launcher.git
 
-          # Mirror everything: branches, tags, refs
-          git push --mirror codeberg
+          # Push all branches
+          git push --all codeberg
+
+          # Push all tags
+          git push --tags codeberg
