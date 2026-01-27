@@ -1,5 +1,6 @@
 package eu.ottop.yamlauncher.utils
 
+import android.os.Build
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -35,8 +36,11 @@ class BiometricUtils(private val activity: FragmentActivity) {
         val executor = ContextCompat.getMainExecutor(activity)
         val biometricPrompt = BiometricPrompt(activity, executor, authenticationCallback)
 
-        val authenticators =
+        val authenticators = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        } else {
+            BiometricManager.Authenticators.BIOMETRIC_STRONG
+        }
         val canAuthenticate =
             BiometricManager.from(activity).canAuthenticate(authenticators)
 

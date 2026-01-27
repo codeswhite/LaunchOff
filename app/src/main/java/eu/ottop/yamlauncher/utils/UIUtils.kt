@@ -5,8 +5,11 @@ import android.content.res.Configuration
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.Typeface
+import android.os.Build
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -16,6 +19,7 @@ import android.view.ViewTreeObserver
 import android.view.Window
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Space
@@ -106,10 +110,17 @@ class UIUtils(private val context: Context) {
             hasMethod(view, "setTextColor") -> {
                 val textView = view as TextView
                 textView.setTextColor(color)
-                textView.compoundDrawables[0]?.colorFilter =
-                    BlendModeColorFilter(sharedPreferenceManager.getTextColor(), BlendMode.SRC_ATOP)
-                textView.compoundDrawables[2]?.colorFilter =
-                    BlendModeColorFilter(sharedPreferenceManager.getTextColor(), BlendMode.SRC_ATOP)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    textView.compoundDrawables[0]?.colorFilter =
+                        BlendModeColorFilter(sharedPreferenceManager.getTextColor(), BlendMode.SRC_ATOP)
+                    textView.compoundDrawables[2]?.colorFilter =
+                        BlendModeColorFilter(sharedPreferenceManager.getTextColor(), BlendMode.SRC_ATOP)
+                } else {
+                    textView.compoundDrawables[0]?.colorFilter =
+                        PorterDuffColorFilter(sharedPreferenceManager.getTextColor(), PorterDuff.Mode.SRC_ATOP)
+                    textView.compoundDrawables[2]?.colorFilter =
+                        PorterDuffColorFilter(sharedPreferenceManager.getTextColor(), PorterDuff.Mode.SRC_ATOP)
+                }
 
                 // Apply text shadow if enabled
                 if (sharedPreferenceManager.isTextShadowEnabled()) {
@@ -125,15 +136,31 @@ class UIUtils(private val context: Context) {
     }
 
     fun setStatusBarColor(window: Window) {
-        val insetController = window.insetsController
-        when (sharedPreferenceManager.getTextString()) {
-            "#FFF3F3F3" -> insetController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            "#FF0C0C0C" -> insetController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            "material" -> {
-                val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-                when (currentNightMode) {
-                    Configuration.UI_MODE_NIGHT_YES -> insetController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-                    Configuration.UI_MODE_NIGHT_NO -> insetController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val insetController = window.insetsController
+            when (sharedPreferenceManager.getTextString()) {
+                "#FFF3F3F3" -> insetController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+                "#FF0C0C0C" -> insetController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+                "material" -> {
+                    val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                    when (currentNightMode) {
+                        Configuration.UI_MODE_NIGHT_YES -> insetController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+                        Configuration.UI_MODE_NIGHT_NO -> insetController?.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+                    }
+                }
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            val decorView = window.decorView
+            when (sharedPreferenceManager.getTextString()) {
+                "#FFF3F3F3" -> decorView.systemUiVisibility = decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                "#FF0C0C0C" -> decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                "material" -> {
+                    val currentNightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                    when (currentNightMode) {
+                        Configuration.UI_MODE_NIGHT_YES -> decorView.systemUiVisibility = decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                        Configuration.UI_MODE_NIGHT_NO -> decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                    }
                 }
             }
         }
@@ -153,9 +180,14 @@ class UIUtils(private val context: Context) {
         view.setTextColor(setAlpha(color, alphaHex))
         view.setHintTextColor(setAlpha(color, "A9"))
 
-        view.compoundDrawables[0]?.mutate()?.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            view.compoundDrawables[0]?.mutate()?.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+            view.compoundDrawables[2]?.mutate()?.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+        } else {
+            view.compoundDrawables[0]?.mutate()?.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+            view.compoundDrawables[2]?.mutate()?.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        }
         view.compoundDrawables[0]?.alpha = "A9".toInt(16)
-        view.compoundDrawables[2]?.mutate()?.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
         view.compoundDrawables[2]?.alpha = "A9".toInt(16)
 
         // Apply text shadow if enabled
@@ -456,59 +488,71 @@ class UIUtils(private val context: Context) {
 
     private fun setShortcutSize(shortcut: TextView, size: String?) {
         try {
-            when (size) {
-                "tiny" -> {
-                    shortcut.setAutoSizeTextTypeUniformWithConfiguration(
-                        5,   // Min text size in SP
-                        20,   // Max text size in SP
-                        2,    // Step granularity in SP
-                        TypedValue.COMPLEX_UNIT_SP // Unit of measurement
-                    )
-                }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                when (size) {
+                    "tiny" -> {
+                        shortcut.setAutoSizeTextTypeUniformWithConfiguration(
+                            5,   // Min text size in SP
+                            20,   // Max text size in SP
+                            2,    // Step granularity in SP
+                            TypedValue.COMPLEX_UNIT_SP // Unit of measurement
+                        )
+                    }
 
-                "small" -> {
-                    shortcut.setAutoSizeTextTypeUniformWithConfiguration(
-                        5,   // Min text size in SP
-                        24,   // Max text size in SP
-                        2,    // Step granularity in SP
-                        TypedValue.COMPLEX_UNIT_SP // Unit of measurement
-                    )
-                }
+                    "small" -> {
+                        shortcut.setAutoSizeTextTypeUniformWithConfiguration(
+                            5,   // Min text size in SP
+                            24,   // Max text size in SP
+                            2,    // Step granularity in SP
+                            TypedValue.COMPLEX_UNIT_SP // Unit of measurement
+                        )
+                    }
 
-                "medium" -> {
-                    shortcut.setAutoSizeTextTypeUniformWithConfiguration(
-                        5,   // Min text size in SP
-                        28,   // Max text size in SP
-                        2,    // Step granularity in SP
-                        TypedValue.COMPLEX_UNIT_SP // Unit of measurement
-                    )
-                }
+                    "medium" -> {
+                        shortcut.setAutoSizeTextTypeUniformWithConfiguration(
+                            5,   // Min text size in SP
+                            28,   // Max text size in SP
+                            2,    // Step granularity in SP
+                            TypedValue.COMPLEX_UNIT_SP // Unit of measurement
+                        )
+                    }
 
-                "large" -> {
-                    shortcut.setAutoSizeTextTypeUniformWithConfiguration(
-                        5,   // Min text size in SP
-                        32,   // Max text size in SP
-                        2,    // Step granularity in SP
-                        TypedValue.COMPLEX_UNIT_SP // Unit of measurement
-                    )
-                }
+                    "large" -> {
+                        shortcut.setAutoSizeTextTypeUniformWithConfiguration(
+                            5,   // Min text size in SP
+                            32,   // Max text size in SP
+                            2,    // Step granularity in SP
+                            TypedValue.COMPLEX_UNIT_SP // Unit of measurement
+                        )
+                    }
 
-                "extra" -> {
-                    shortcut.setAutoSizeTextTypeUniformWithConfiguration(
-                        5,   // Min text size in SP
-                        36,   // Max text size in SP
-                        2,    // Step granularity in SP
-                        TypedValue.COMPLEX_UNIT_SP // Unit of measurement
-                    )
-                }
+                    "extra" -> {
+                        shortcut.setAutoSizeTextTypeUniformWithConfiguration(
+                            5,   // Min text size in SP
+                            36,   // Max text size in SP
+                            2,    // Step granularity in SP
+                            TypedValue.COMPLEX_UNIT_SP // Unit of measurement
+                        )
+                    }
 
-                "huge" -> {
-                    shortcut.setAutoSizeTextTypeUniformWithConfiguration(
-                        5,   // Min text size in SP
-                        40,   // Max text size in SP
-                        2,    // Step granularity in SP
-                        TypedValue.COMPLEX_UNIT_SP // Unit of measurement
-                    )
+                    "huge" -> {
+                        shortcut.setAutoSizeTextTypeUniformWithConfiguration(
+                            5,   // Min text size in SP
+                            40,   // Max text size in SP
+                            2,    // Step granularity in SP
+                            TypedValue.COMPLEX_UNIT_SP // Unit of measurement
+                        )
+                    }
+                }
+            } else {
+                // Fallback for API < 26: use fixed text size
+                when (size) {
+                    "tiny" -> shortcut.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+                    "small" -> shortcut.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+                    "medium" -> shortcut.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
+                    "large" -> shortcut.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
+                    "extra" -> shortcut.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30f)
+                    "huge" -> shortcut.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34f)
                 }
             }
         } catch(_: Exception) {}
@@ -602,16 +646,26 @@ class UIUtils(private val context: Context) {
 
     // Status bar visibility
     fun setStatusBar(window: Window) {
-        val windowInsetsController = window.insetsController
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowInsetsController = window.insetsController
 
-        windowInsetsController?.let {
-            if (sharedPreferenceManager.isBarVisible()) {
-                it.show(WindowInsets.Type.statusBars())
+            windowInsetsController?.let {
+                if (sharedPreferenceManager.isBarVisible()) {
+                    it.show(WindowInsets.Type.statusBars())
+                }
+                else {
+                    it.hide(WindowInsets.Type.statusBars())
+                    it.systemBarsBehavior =
+                        WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
             }
-            else {
-                it.hide(WindowInsets.Type.statusBars())
-                it.systemBarsBehavior =
-                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        } else {
+            @Suppress("DEPRECATION")
+            val decorView = window.decorView
+            if (sharedPreferenceManager.isBarVisible()) {
+                decorView.systemUiVisibility = decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_FULLSCREEN.inv()
+            } else {
+                decorView.systemUiVisibility = decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_FULLSCREEN
             }
         }
     }
