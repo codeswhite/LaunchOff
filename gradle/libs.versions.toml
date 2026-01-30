@@ -1,8 +1,8 @@
 # gradle/libs.versions.toml
 
 [versions]
-agp = "8.13.2"
-kotlin = "2.2.0"
+agp = "9.0.0"
+kotlin = "2.2.10"
 
 # AndroidX Core and AppCompat
 core-ktx = "1.16.0"
