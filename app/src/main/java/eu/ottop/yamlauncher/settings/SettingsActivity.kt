@@ -32,13 +32,16 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var performBackup: ActivityResultLauncher<Intent>
     private lateinit var performRestore: ActivityResultLauncher<Intent>
     private lateinit var performLogExport: ActivityResultLauncher<Intent>
+    private lateinit var logger: Logger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val uiUtils = UIUtils(this@SettingsActivity)
 
+        logger = Logger.getInstance(this@SettingsActivity)
         sharedPreferenceManager = SharedPreferenceManager(this@SettingsActivity)
         preferences = PreferenceManager.getDefaultSharedPreferences(this@SettingsActivity)
+        logger.i("SettingsActivity", "SettingsActivity started")
 
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -138,8 +141,10 @@ class SettingsActivity : AppCompatActivity() {
             contentResolver.openOutputStream(uri)?.use { outputStream ->
                 outputStream.write(sharedPreferencesText.toByteArray())
             }
+            logger.i("SettingsActivity", "Settings backup created successfully")
             Toast.makeText(this, getString(R.string.backup_success), Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
+            logger.e("SettingsActivity", "Failed to create settings backup", e)
             Toast.makeText(this, getString(R.string.backup_fail), Toast.LENGTH_SHORT).show()
         }
     }
@@ -183,10 +188,13 @@ class SettingsActivity : AppCompatActivity() {
 
                 editor.apply()
 
+                logger.i("SettingsActivity", "Settings restored successfully")
                 Toast.makeText(this, getString(R.string.restore_success), Toast.LENGTH_SHORT).show()
             } catch(e: IllegalArgumentException) {
+                logger.w("SettingsActivity", "Restore failed: ${e.message}")
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
+                logger.e("SettingsActivity", "Failed to restore settings", e)
                 Toast.makeText(this, getString(R.string.restore_fail), Toast.LENGTH_SHORT).show()
             }
         } else {

@@ -23,12 +23,14 @@ import androidx.lifecycle.lifecycleScope
 import eu.ottop.yamlauncher.databinding.ActivityMainBinding
 import eu.ottop.yamlauncher.settings.SharedPreferenceManager
 import eu.ottop.yamlauncher.utils.Animations
+import eu.ottop.yamlauncher.utils.Logger
 import kotlinx.coroutines.launch
 
 class AppActionMenu(private val activity: MainActivity, private val binding: ActivityMainBinding, private val launcherApps: LauncherApps, private val searchView: EditText) {
 
     private val animations = Animations(activity)
     private val sharedPreferenceManager = SharedPreferenceManager(activity)
+    private val logger = Logger.getInstance(activity)
 
     fun setActionListeners(
         textView: TextView,
@@ -169,7 +171,10 @@ class AppActionMenu(private val activity: MainActivity, private val binding: Act
     }
 
     private fun pinApp(appActivity: LauncherActivityInfo, workProfile: Int) {
-        sharedPreferenceManager.setPinnedApp(appActivity.componentName.flattenToString(), workProfile)
+        val componentName = appActivity.componentName.flattenToString()
+        sharedPreferenceManager.setPinnedApp(componentName, workProfile)
+        val isPinned = sharedPreferenceManager.isAppPinned(componentName, workProfile)
+        logger.i("AppActionMenu", "App ${appActivity.label} ${if (isPinned) "pinned" else "unpinned"}")
     }
 
     private fun appInfo(
@@ -188,6 +193,7 @@ class AppActionMenu(private val activity: MainActivity, private val binding: Act
     }
 
     private fun uninstallApp(appInfo: ApplicationInfo, userHandle: UserHandle) {
+        logger.i("AppActionMenu", "Uninstalling app: ${appInfo.packageName}")
         val intent = Intent(Intent.ACTION_DELETE)
         intent.data = Uri.parse("package:${appInfo.packageName}")
         intent.putExtra(Intent.EXTRA_USER, userHandle)
@@ -251,11 +257,13 @@ class AppActionMenu(private val activity: MainActivity, private val binding: Act
                 val imm =
                     activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(editText.windowToken, 0)
+                val newName = editText.text.toString()
                 sharedPreferenceManager.setAppName(
                     app.first.componentName.flattenToString(),
                     workProfile,
-                    editText.text.toString()
+                    newName
                 )
+                logger.i("AppActionMenu", "App renamed from '${app.first.label}' to '$newName'")
                 activity.lifecycleScope.launch {
                     activity.applySearch()
                 }
@@ -287,6 +295,7 @@ class AppActionMenu(private val activity: MainActivity, private val binding: Act
         editLayout.visibility = View.GONE
         textView.visibility = View.GONE
         actionMenu.visibility = View.GONE
+        logger.i("AppActionMenu", "Hiding app: ${appActivity.label}")
         activity.lifecycleScope.launch {
             sharedPreferenceManager.setAppHidden(appActivity.componentName.flattenToString(), workProfile, true)
             activity.refreshAppMenu()

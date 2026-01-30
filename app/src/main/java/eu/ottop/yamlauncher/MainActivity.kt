@@ -538,7 +538,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                                 )
                             )
                         )
-                    } catch (_: ActivityNotFoundException) {
+                    } catch (e: ActivityNotFoundException) {
+                        logger.w("MainActivity", "No calendar app found when clicking date")
                         Toast.makeText(this, getString(R.string.no_calendar_app), Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -582,27 +583,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     }
 
                     override fun onAuthenticationFailed() {
-                        Log.e(
-                            "Authentication",
-                            getString(R.string.text_authentication_failed)
-                        )
+                        logger.w("MainActivity", "Biometric authentication failed")
                     }
 
                     override fun onAuthenticationError(errorCode: Int, errorMessage: CharSequence?) {
                         when (errorCode) {
-                            BiometricPrompt.ERROR_USER_CANCELED -> Log.e(
-                                "Authentication",
-                                getString(R.string.text_authentication_cancel)
-                            )
-
-                            else ->
-                                Log.e(
-                                    "Authentication",
-                                    getString(R.string.text_authentication_error).format(
-                                        errorMessage,
-                                        errorCode
-                                    )
-                                )
+                            BiometricPrompt.ERROR_USER_CANCELED -> logger.i("MainActivity", "Biometric authentication cancelled by user")
+                            else -> logger.e("MainActivity", "Biometric authentication error: $errorMessage (code: $errorCode)")
                         }
                     }
                 })
@@ -943,6 +930,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             if (intent.resolveActivity(packageManager) != null) {
                 startActivity(intent)
             } else {
+                logger.w("MainActivity", "No browser app found for web search")
                 Toast.makeText(this@MainActivity, "No browser app found.", Toast.LENGTH_SHORT).show()
             }
         }

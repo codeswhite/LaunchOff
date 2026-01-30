@@ -21,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText
 import eu.ottop.yamlauncher.databinding.ActivityMainBinding
 import eu.ottop.yamlauncher.settings.SharedPreferenceManager
 import eu.ottop.yamlauncher.utils.AppUtils
+import eu.ottop.yamlauncher.utils.Logger
 import eu.ottop.yamlauncher.utils.UIUtils
 
 class AppDiffCallback(
@@ -59,6 +60,7 @@ class AppMenuAdapter(
         private val sharedPreferenceManager = SharedPreferenceManager(activity)
         private val uiUtils = UIUtils(activity)
         private val appUtils = AppUtils(activity, launcherApps)
+        private val logger = Logger.getInstance(activity)
         private var appActionMenu = AppActionMenu(activity, binding, launcherApps, activity.findViewById(R.id.searchView))
 
     interface OnItemClickListener {

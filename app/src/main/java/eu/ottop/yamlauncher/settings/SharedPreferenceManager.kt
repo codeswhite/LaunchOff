@@ -7,10 +7,12 @@ import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
 import androidx.preference.PreferenceManager
 import eu.ottop.yamlauncher.R
+import eu.ottop.yamlauncher.utils.Logger
 
 class SharedPreferenceManager(private val context: Context) {
 
     private val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val logger = Logger.getInstance(context)
 
     // General UI
     fun getBgColor(): Int {
@@ -376,6 +378,7 @@ class SharedPreferenceManager(private val context: Context) {
     }
 
     private fun performReset() {
+        logger.i("SharedPreferenceManager", "Resetting all preferences")
         preferences.edit {
             clear()
             putBoolean("isRestored", true)
