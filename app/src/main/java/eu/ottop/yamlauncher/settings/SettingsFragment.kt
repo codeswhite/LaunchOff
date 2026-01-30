@@ -7,11 +7,13 @@ import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import eu.ottop.yamlauncher.R
+import eu.ottop.yamlauncher.utils.Logger
 import eu.ottop.yamlauncher.utils.UIUtils
 
 class SettingsFragment : PreferenceFragmentCompat(), TitleProvider {
 
     private lateinit var sharedPreferenceManager: SharedPreferenceManager
+    private lateinit var logger: Logger
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -19,6 +21,7 @@ class SettingsFragment : PreferenceFragmentCompat(), TitleProvider {
         val uiUtils = UIUtils(requireContext())
 
         sharedPreferenceManager = SharedPreferenceManager(requireContext())
+        logger = Logger.getInstance(requireContext())
 
         val homePref = findPreference<Preference>("defaultHome")
 
@@ -29,6 +32,8 @@ class SettingsFragment : PreferenceFragmentCompat(), TitleProvider {
         val hiddenPref = findPreference<Preference>("hiddenApps")
         val backupPref = findPreference<Preference>("backup")
         val restorePref = findPreference<Preference>("restore")
+        val exportLogsPref = findPreference<Preference>("exportLogs")
+        val clearLogsPref = findPreference<Preference>("clearLogs")
         val aboutPref = findPreference<Preference>("aboutPage")
         val restartPref = findPreference<Preference>("restartLauncher")
         val resetPref = findPreference<Preference>("resetAll")
@@ -87,6 +92,17 @@ class SettingsFragment : PreferenceFragmentCompat(), TitleProvider {
         resetPref?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
                 sharedPreferenceManager.resetAllPreferences()
+                true }
+
+        exportLogsPref?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                (requireActivity() as SettingsActivity).exportLogs()
+                true }
+
+        clearLogsPref?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                logger.clearLogs()
+                Toast.makeText(requireContext(), getString(R.string.logs_cleared), Toast.LENGTH_SHORT).show()
                 true }
     }
 

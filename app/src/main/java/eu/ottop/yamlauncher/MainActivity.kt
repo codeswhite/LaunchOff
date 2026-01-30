@@ -64,6 +64,7 @@ import eu.ottop.yamlauncher.utils.AppMenuLinearLayoutManager
 import eu.ottop.yamlauncher.utils.AppUtils
 import eu.ottop.yamlauncher.utils.BiometricUtils
 import eu.ottop.yamlauncher.utils.GestureUtils
+import eu.ottop.yamlauncher.utils.Logger
 import eu.ottop.yamlauncher.utils.PermissionUtils
 import eu.ottop.yamlauncher.utils.StringUtils
 import eu.ottop.yamlauncher.utils.UIUtils
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var sharedPreferenceManager: SharedPreferenceManager
 
     private lateinit var animations: Animations
+    private lateinit var logger: Logger
 
     private lateinit var clock: TextClock
     private var clockMargin = 0
@@ -191,6 +193,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private fun setMainVariables() {
         launcherApps = getSystemService(LAUNCHER_APPS_SERVICE) as LauncherApps
+
+        logger = Logger.getInstance(this@MainActivity)
+        logger.i("MainActivity", "MainActivity started")
 
         weatherSystem = WeatherSystem(this@MainActivity)
         appUtils = AppUtils(this@MainActivity, launcherApps)
@@ -432,6 +437,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     if (mainActivity != null) {
                         mainActivity.componentName
                     } else {
+                        logger.w("MainActivity", "Failed to launch shortcut: ${savedView[0]} not found")
                         Toast.makeText(this, this.getString(R.string.launch_error), Toast.LENGTH_SHORT).show()
                         return@setOnClickListener
                     }
@@ -1218,6 +1224,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         unregisterBatteryReceiver()
         preferences.unregisterOnSharedPreferenceChangeListener(this)
         searchJob?.cancel()
+        logger.i("MainActivity", "MainActivity destroyed")
     }
 
     override fun onStart() {
@@ -1338,6 +1345,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                         canLaunchShortcut = false
                         appUtils.launchApp(leftSwipeActivity.first!!.componentName, launcherApps.profiles[leftSwipeActivity.second!!])
                     } else {
+                        logger.w("MainActivity", "Left swipe gesture failed: no app configured")
                         Toast.makeText(this@MainActivity, getString(R.string.launch_error), Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -1352,6 +1360,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                         canLaunchShortcut = false
                         appUtils.launchApp(rightSwipeActivity.first!!.componentName, launcherApps.profiles[rightSwipeActivity.second!!])
                     } else {
+                        logger.w("MainActivity", "Right swipe gesture failed: no app configured")
                         Toast.makeText(this@MainActivity, getString(R.string.launch_error), Toast.LENGTH_SHORT).show()
                     }
                 }

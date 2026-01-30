@@ -17,6 +17,7 @@ import androidx.preference.PreferenceManager
 import eu.ottop.yamlauncher.MainActivity
 import eu.ottop.yamlauncher.R
 import eu.ottop.yamlauncher.databinding.ActivitySettingsBinding
+import eu.ottop.yamlauncher.utils.Logger
 import eu.ottop.yamlauncher.utils.PermissionUtils
 import eu.ottop.yamlauncher.utils.UIUtils
 import org.json.JSONObject
@@ -30,6 +31,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var performBackup: ActivityResultLauncher<Intent>
     private lateinit var performRestore: ActivityResultLauncher<Intent>
+    private lateinit var performLogExport: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +72,14 @@ class SettingsActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data?.let { uri ->
                     restoreSharedPreferencesFromFile(uri)
+                }
+            }
+        }
+
+        performLogExport = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { uri ->
+                    exportLogsToUri(uri)
                 }
             }
         }
@@ -223,6 +233,36 @@ class SettingsActivity : AppCompatActivity() {
         )
 
         pendingIntent.send()
+    }
+
+    fun exportLogs() {
+        val logger = Logger.getInstance(this)
+        if (logger.getLogFileSize() == 0L) {
+            Toast.makeText(this, getString(R.string.no_logs_to_export), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val timestamp = java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.getDefault()).format(java.util.Date())
+        val createFileIntent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TITLE, "yam_launcher_logs_$timestamp.txt")
+        }
+        performLogExport.launch(createFileIntent)
+    }
+
+    private fun exportLogsToUri(uri: Uri) {
+        try {
+            val logger = Logger.getInstance(this)
+            val logContent = logger.getLogContent()
+
+            contentResolver.openOutputStream(uri)?.use { outputStream ->
+                outputStream.write(logContent.toByteArray())
+            }
+            Toast.makeText(this, getString(R.string.logs_export_success), Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, getString(R.string.logs_export_fail), Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onRequestPermissionsResult(

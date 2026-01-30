@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 class AppUtils(private val context: Context, private val launcherApps: LauncherApps) {
 
     private val sharedPreferenceManager = SharedPreferenceManager(context)
+    private val logger = Logger.getInstance(context)
 
     suspend fun getInstalledApps(showApps: Boolean = false): List<Triple<LauncherActivityInfo, UserHandle, Int>> {
         val allApps = mutableListOf<Triple<LauncherActivityInfo, UserHandle, Int>>()
@@ -87,7 +88,13 @@ class AppUtils(private val context: Context, private val launcherApps: LauncherA
     }
 
     private fun startApp(componentName: ComponentName, userHandle: UserHandle) {
-        launcherApps.startMainActivity(componentName,  userHandle, null, null)
+        try {
+            launcherApps.startMainActivity(componentName,  userHandle, null, null)
+            logger.i("AppUtils", "Launched app: ${componentName.packageName}")
+        } catch (e: Exception) {
+            logger.e("AppUtils", "Failed to launch app: ${componentName.packageName}", e)
+            throw e
+        }
     }
 
     fun launchApp(componentName: ComponentName, userHandle: UserHandle) {

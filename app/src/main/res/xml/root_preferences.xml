@@ -80,6 +80,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:allowDividerAbove="false"
+        app:title="@string/debug_logs">
+        <Preference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:key="exportLogs"
+            app:selectable="true"
+            app:summary="@string/export_logs_summary"
+            app:title="@string/export_logs" />
+        <Preference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:key="clearLogs"
+            app:selectable="true"
+            app:summary="@string/clear_logs_summary"
+            app:title="@string/clear_logs" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:allowDividerAbove="false"
         app:title="@string/about">
         <Preference
             android:layout_width="wrap_content"

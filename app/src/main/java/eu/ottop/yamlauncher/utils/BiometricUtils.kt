@@ -9,6 +9,7 @@ import eu.ottop.yamlauncher.R
 
 class BiometricUtils(private val activity: FragmentActivity) {
     private lateinit var callbackSettings: CallbackSettings
+    private val logger = Logger.getInstance(activity)
 
     interface CallbackSettings {
         fun onAuthenticationSucceeded()
@@ -21,14 +22,17 @@ class BiometricUtils(private val activity: FragmentActivity) {
 
         val authenticationCallback = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                logger.i("BiometricUtils", "Biometric authentication succeeded")
                 callbackSettings.onAuthenticationSucceeded()
             }
 
             override fun onAuthenticationFailed() {
+                logger.w("BiometricUtils", "Biometric authentication failed")
                 callbackSettings.onAuthenticationFailed()
             }
 
             override fun onAuthenticationError(errorCode: Int, errorMessage: CharSequence) {
+                logger.e("BiometricUtils", "Biometric authentication error: $errorMessage (code: $errorCode)")
                 callbackSettings.onAuthenticationError(errorCode, errorMessage)
             }
         }
@@ -52,7 +56,10 @@ class BiometricUtils(private val activity: FragmentActivity) {
             .build()
 
         if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
+            logger.i("BiometricUtils", "Starting biometric authentication")
             biometricPrompt.authenticate(promptInfo)
+        } else {
+            logger.w("BiometricUtils", "Biometric authentication not available: $canAuthenticate")
         }
     }
 }

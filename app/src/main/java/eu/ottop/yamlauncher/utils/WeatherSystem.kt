@@ -21,6 +21,7 @@ class WeatherSystem(private val context: Context) {
 
     private val sharedPreferenceManager = SharedPreferenceManager(context)
     private val stringUtils = StringUtils()
+    private val logger = Logger.getInstance(context)
 
     suspend fun setGpsLocation(activity: MainActivity) {
 
@@ -92,7 +93,8 @@ class WeatherSystem(private val context: Context) {
                         ))
                     }
                 }
-            }catch (_: Exception){
+            }catch (e: Exception){
+                logger.e("WeatherSystem", "Error searching locations for '$searchTerm'", e)
             }
         }
         return foundLocations
@@ -150,7 +152,9 @@ class WeatherSystem(private val context: Context) {
 
                         }
 
-                    } catch(_: Exception) {}
+                    } catch(e: Exception) {
+                        logger.e("WeatherSystem", "Error fetching weather data", e)
+                    }
                 }}
         }
 
