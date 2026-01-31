@@ -1,0 +1,216 @@
+<resources>
+    <!--Home Screen-->
+    <string name="set_default_launcher_prompt">YAM Launcher não está definido como seu app de início padrão.</string>
+    <string name="set_default_launcher_button">Definir como padrão</string>
+    <string name="shortcut_default">Pressione e segure para adicionar um app</string>
+
+    <string name="shortcut_default_click">Pressione e segure para selecionar</string>
+
+    <string name="accessibility_set_shortcut">Definir app de atalho</string>
+
+    <string name="open_app_menu">Abrir menu de apps</string>
+
+    <string name="no_calendar_app">Nenhum app de calendário encontrado</string>
+
+    <!--App Menu-->
+    <string name="select_an_app">Selecionar um app</string>
+
+    <string name="search">Pesquisar…</string>
+
+    <string name="switch_to_contacts">Alternar para contatos</string>
+    <string name="switch_to_apps">Alternar para apps</string>
+
+    <string name="confirm_title">Confirmação</string>
+    <string name="app_confirm_text">Tem certeza de que deseja escolher</string>
+    <string name="confirm_yes">Sim</string>
+    <string name="confirm_no">Cancelar</string>
+
+    <string name="removing">Removendo…</string>
+
+    <string name="close_app_menu">Fechar menu de apps</string>
+
+    <string name="launch_error">Não foi possível abrir o app</string>
+
+    <string name="empty_rename">O nome não pode estar vazio</string>
+
+    <!--Action Menu Items-->
+    <string name="pin">Fixar</string>
+    <string name="unpin">Desafixar</string>
+    <string name="info">Informações</string>
+    <string name="uninstall">Desinstalar</string>
+    <string name="rename">Renomear</string>
+    <string name="hide">Ocultar</string>
+    <string name="close">Fechar</string>
+    <string name="accessibility_pin">Fixar app</string>
+    <string name="accessibility_unpin">Desafixar app</string>
+    <string name="accessibility_info">Informações do app</string>
+    <string name="accessibility_uninstall">Desinstalar app</string>
+    <string name="accessibility_rename">Renomear app</string>
+    <string name="accessibility_hide">Ocultar app</string>
+    <string name="rename_error">Não foi possível iniciar o modo de renomeação</string>
+
+    <!--Settings Page-->
+    <string name="settings_title">Configurações do launcher</string>
+
+    <string name="default_home">Definir tela inicial padrão</string>
+    <string name="unable_to_launch_settings">Não foi possível abrir as configurações</string>
+
+    <string name="lock_settings">Bloquear configurações</string>
+
+    <string name="customization">Personalização</string>
+
+    <string name="ui_settings_title">Configurações gerais da interface</string>
+    <string name="ui_settings_text">Interface geral</string>
+    <string name="ui_settings_summary">Configurar a aparência geral</string>
+
+    <string name="appearance">Aparência</string>
+    <string name="background_color">Cor de fundo</string>
+    <string name="text_color">Cor do texto</string>
+    <string name="text_font">Fonte do texto</string>
+    <string name="text_style">Estilo do texto</string>
+    <string name="text_shadow">Sombra do texto</string>
+
+    <string name="operation">Funcionamento</string>
+    <string name="animation_speed">Velocidade de animação</string>
+    <string name="swipe_threshold">Limite de deslize</string>
+    <string name="swipe_velocity_threshold">Limite de velocidade de deslize</string>
+    <string name="show_status_bar">Mostrar barra de status</string>
+    <string name="enable_confirmation">Diálogo de confirmação do app</string>
+    <string name="launch_confirmation_text">Tem certeza de que deseja abrir este app?</string>
+
+    <string name="home_settings_title">Configurações da tela inicial</string>
+    <string name="home_settings_text">Tela inicial</string>
+    <string name="home_settings_summary">Configurar a tela inicial</string>
+
+    <string name="clock">Relógio</string>
+    <string name="show_clock">Mostrar relógio</string>
+    <string name="clock_alignment">Alinhamento do relógio</string>
+    <string name="clock_size">Tamanho do relógio</string>
+    <string name="clicking_time_opens_clock">Clicar na hora abre o relógio</string>
+    <string name="custom_clock_gesture">Relógio personalizado</string>
+    <string name="set_clock_app">Definir app de relógio</string>
+
+    <string name="date">Data</string>
+    <string name="show_date">Mostrar data</string>
+    <string name="date_size">Tamanho da data</string>
+    <string name="battery_indicator">Indicador de bateria</string>
+    <string name="clicking_date_opens_calendar">Clicar na data abre o calendário</string>
+    <string name="custom_date_gesture">Calendário personalizado</string>
+    <string name="set_calendar_app">Definir app de calendário</string>
+
+    <string name="weather">Clima</string>
+    <string name="gps_location">Localização GPS</string>
+    <string name="latest_location">Última localização GPS</string>
+    <string name="set_manual_location">Definir localização manualmente</string>
+    <string name="find_your_city">"Pesquise pela sua cidade"</string>
+    <string name="units">Unidades</string>
+
+    <string name="shortcuts">Atalhos</string>
+    <string name="number_of_shortcuts">Número de atalhos</string>
+    <string name="horizontal_alignment">Alinhamento horizontal</string>
+    <string name="vertical_alignment">Alinhamento vertical</string>
+    <string name="shortcut_size">Tamanho dos atalhos</string>
+    <string name="shortcut_spacing">Espaçamento dos atalhos</string>
+    <string name="lock_shortcuts">Bloquear atalhos</string>
+    <string name="hidden_shortcut_title">Apps ocultos</string>
+    <string name="hidden_shortcuts">Mostrar apps ocultos na seleção de atalhos</string>
+
+    <string name="gestures">Gestos</string>
+    <string name="swipe_left">Deslizar para a esquerda</string>
+    <string name="left_swipe_app">App de deslize esquerdo</string>
+    <string name="swipe_right">Deslizar para a direita</string>
+    <string name="right_swipe_app">App de deslize direito</string>
+    <string name="double_tap_to_lock_screen">Toque duplo para bloquear a tela</string>
+
+    <string name="app_settings_title">Configurações do menu de apps</string>
+    <string name="app_settings_text">Menu de apps</string>
+    <string name="app_settings_summary">Configurar o menu de aplicativos</string>
+
+    <string name="apps">Apps</string>
+    <string name="app_alignment">Alinhamento dos apps</string>
+    <string name="app_size">Tamanho dos apps</string>
+    <string name="app_spacing">Espaçamento dos apps</string>
+    <string name="contacts_menu">Menu de contatos</string>
+    <string name="permission_denied">Permissão negada</string>
+    <string name="internet_search">Botão de pesquisa na web</string>
+
+    <string name="context_menu_settings_title">Configurações do menu de contexto</string>
+    <string name="context_menu_settings_text">Menu de contexto</string>
+    <string name="context_menu_settings_summary">Ativar/desativar itens do menu de contexto</string>
+
+    <string name="enable_pin">Fixar app</string>
+    <string name="enable_info">Informações do app</string>
+    <string name="enable_uninstall">Desinstalar app</string>
+    <string name="enable_rename">Renomear app</string>
+    <string name="enable_hide">Ocultar app</string>
+    <string name="enable_close">Fechar menu</string>
+
+    <string name="search_text">Pesquisar</string>
+    <string name="enable_search">Ativar pesquisa</string>
+    <string name="search_alignment">Alinhamento da pesquisa</string>
+    <string name="search_size">Tamanho da pesquisa</string>
+    <string name="enable_fuzzy_search">Pesquisa difusa</string>
+    <string name="automatically_open_keyboard">Abrir teclado automaticamente</string>
+    <string name="automatic_app_opening">Abertura automática de app</string>
+    <string name="auto_launch_summary">Iniciar automaticamente um app quando for o último resultado de pesquisa</string>
+
+    <string name="hidden_apps_title">Apps ocultos</string>
+    <string name="hidden_apps_text">Gerenciar apps ocultos</string>
+    <string name="hidden_apps_summary">Reexibir apps ocultos novamente</string>
+    <string name="hidden_confirm_text">Tem certeza de que deseja reexibir</string>
+
+    <string name="about">Sobre</string>
+    <!--About Page Items-->
+    <string name="about_title">Sobre o YAM Launcher</string>
+    <string name="app_icon">Ícone do app</string>
+    <string name="creditName">Criado por Otto, mantido por ThomasNow Productions</string>
+    <string name="source_code">Código-fonte</string>
+    <string name="codeberg">Codeberg</string>
+    <string name="github">GitHub</string>
+    <string name="view_github">Ver este projeto no GitHub</string>
+    <string name="install_fdroid">Instalar no F-Droid</string>
+    <string name="install_izzy">Instalar no IzzyOnDroid</string>
+    <string name="install_play">Instalar no Google Play</string>
+
+    <string name="reset">Redefinir</string>
+    <string name="restart_text">Reiniciar YAM Launcher</string>
+    <string name="reset_text">Redefinir todas as configurações</string>
+    <string name="reset_confirm_text">Você perderá TODAS as alterações que você fez nas configurações do launcher, atalhos, apps ocultos, etc.\n\nTem certeza?</string>
+
+    <string name="backup_restore">Backup e Restauração</string>
+    <string name="backup">Backup</string>
+    <string name="backup_summary">Fazer backup das suas configurações</string>
+    <string name="restore">Restaurar</string>
+    <string name="restore_summary">Restaurar um backup</string>
+    <string name="backup_success">Backup bem-sucedido :)</string>
+    <string name="backup_fail">Falha no backup :(</string>
+    <string name="restore_success">Restauração bem-sucedida :)</string>
+    <string name="restore_fail">Falha na restauração :( (arquivo corrompido?)</string>
+    <string name="restore_wrong_app">Não é um backup do YAM Launcher</string>
+    <string name="restore_error">Falha ao ler arquivo</string>
+
+    <!--Logging-->
+    <string name="debug_logs">Logs de depuração</string>
+    <string name="export_logs">Exportar logs</string>
+    <string name="export_logs_summary">Compartilhar logs para ajudar a diagnosticar problemas</string>
+    <string name="clear_logs">Limpar logs</string>
+    <string name="clear_logs_summary">Excluir todos os arquivos de log armazenados</string>
+    <string name="logs_cleared">Logs limpos</string>
+    <string name="logs_export_success">Logs exportados com sucesso</string>
+    <string name="logs_export_fail">Falha ao exportar logs</string>
+    <string name="no_logs_to_export">Nenhum log para exportar</string>
+
+    <!--Location Selector Items-->
+    <string name="region_text">%1$s%2$s</string>
+
+    <!--Double tap to lock-->
+    <string name="screenlock_confirmation">Para bloquear com toque duplo, ative o YAM Launcher nas configurações de acessibilidade.</string>
+    <string name="accessibility_service_description">Esta permissão é necessária para que o recurso de toque duplo funcione para bloquear a tela.\n\nEla só é necessária se você desejar usar o recurso de toque duplo para bloquear a tela no YAM Launcher.</string>
+
+    <string name="text_authentication_cancel">Autenticação cancelada.</string>
+    <string name="text_authentication_error">Erro de autenticação: %1$s (código %2$d)</string>
+    <string name="text_authentication_failed">Falha na autenticação.</string>
+    <string name="text_biometric_login">Desbloquear configurações do YAM Launcher</string>
+    <string name="text_biometric_login_app">Login biométrico para %1$s</string>
+    <string name="text_biometric_login_sub">Faça login usando suas credenciais biométricas.</string>
+</resources>
