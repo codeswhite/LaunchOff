@@ -22,7 +22,7 @@ import eu.ottop.yamlauncher.utils.PermissionUtils
 import eu.ottop.yamlauncher.utils.UIUtils
 import org.json.JSONObject
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val permissionUtils = PermissionUtils()
 
@@ -45,6 +45,9 @@ class SettingsActivity : AppCompatActivity() {
 
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        uiUtils.setBackground(window)
+        preferences.registerOnSharedPreferenceChangeListener(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = getString(R.string.settings_title)
@@ -312,4 +315,15 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        preferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
+        if (key == "bgColor") {
+            val uiUtils = UIUtils(this@SettingsActivity)
+            uiUtils.setBackground(window)
+        }
+    }
 }
