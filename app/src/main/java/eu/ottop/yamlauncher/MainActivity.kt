@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 while (true) {
                     updateWeather()
-                    delay(600000)
+                    delay(sharedPreferenceManager.getWeatherUpdateIntervalMs())
                 }
             }
         }

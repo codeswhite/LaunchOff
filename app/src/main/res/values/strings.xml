@@ -103,6 +103,7 @@
     <string name="latest_location">Latest GPS location</string>
     <string name="set_manual_location">Set Manual Location</string>
     <string name="find_your_city">"Search for Your City"</string>
+    <string name="weather_update_interval">Update Interval</string>
     <string name="units">Units</string>
 
     <string name="shortcuts">Shortcuts</string>

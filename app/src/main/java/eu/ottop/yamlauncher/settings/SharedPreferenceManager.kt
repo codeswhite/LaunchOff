@@ -223,6 +223,12 @@ class SharedPreferenceManager(private val context: Context) {
         return preferences.getString("tempUnits", "celsius")
     }
 
+    fun getWeatherUpdateIntervalMs(): Long {
+        val defaultMs = 600000L
+        val ms = preferences.getString("weatherUpdateInterval", defaultMs.toString())?.toLongOrNull() ?: defaultMs
+        return ms.coerceAtLeast(60000L)
+    }
+
     fun isClockGestureEnabled(): Boolean {
         return preferences.getBoolean("clockClick", true)
     }
