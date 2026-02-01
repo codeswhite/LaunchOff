@@ -151,7 +151,6 @@
     <string name="automatically_open_keyboard">Apri tastiera automaticamente</string>
     <string name="automatic_app_opening">Apertura automatica app</string>
     <string name="auto_launch_summary">Avvia automaticamente un\'app quando è l\'ultimo risultato di ricerca</string>
-    <string name="auto_launch_disabled_reason_search">Disattivato perché la ricerca è disattivata.</string>
     <string name="auto_launch_disabled_reason_web_search">Disattivato perché il pulsante di ricerca web è attivato.</string>
 
     <string name="hidden_apps_title">App nascoste</string>

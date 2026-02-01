@@ -149,7 +149,6 @@
     <string name="automatically_open_keyboard">Tastatur automatisch öffnen</string>
     <string name="automatic_app_opening">Automatisches öffnen der Apps</string>
     <string name="auto_launch_summary">App automatisch öffnen, wenn sie das letzte Suchergebnis ist</string>
-    <string name="auto_launch_disabled_reason_search">Deaktiviert, weil die Suche ausgeschaltet ist.</string>
     <string name="auto_launch_disabled_reason_web_search">Deaktiviert, weil die Web-Suchfunktion aktiviert ist.</string>
 
     <string name="hidden_apps_title">Versteckte Apps</string>

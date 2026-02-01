@@ -151,7 +151,6 @@
     <string name="automatically_open_keyboard">Автоматически открывать клавиатуру</string>
     <string name="automatic_app_opening">Автоматический запуск приложения</string>
     <string name="auto_launch_summary">Автоматически запускать приложение, когда оно является последним результатом поиска</string>
-    <string name="auto_launch_disabled_reason_search">Отключено, потому что поиск выключен.</string>
     <string name="auto_launch_disabled_reason_web_search">Отключено, потому что включена кнопка веб-поиска.</string>
 
     <string name="hidden_apps_title">Скрытые приложения</string>

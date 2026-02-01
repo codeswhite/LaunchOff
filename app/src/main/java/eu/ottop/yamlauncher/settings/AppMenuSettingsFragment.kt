@@ -73,7 +73,6 @@ class AppMenuSettingsFragment : PreferenceFragmentCompat(), TitleProvider { priv
         val autoLaunch = autoLaunchPref ?: return
         val base = getString(R.string.auto_launch_summary)
         val reason = when {
-            !isSearchEnabled -> getString(R.string.auto_launch_disabled_reason_search)
             isWebSearchEnabled -> getString(R.string.auto_launch_disabled_reason_web_search)
             else -> null
         }

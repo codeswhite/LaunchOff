@@ -151,7 +151,6 @@
     <string name="automatically_open_keyboard">Abrir teclado automáticamente</string>
     <string name="automatic_app_opening">Apertura automática de aplicación</string>
     <string name="auto_launch_summary">Iniciar automáticamente una aplicación cuando es el último resultado de búsqueda</string>
-    <string name="auto_launch_disabled_reason_search">Desactivado porque la búsqueda está desactivada.</string>
     <string name="auto_launch_disabled_reason_web_search">Desactivado porque el botón de búsqueda web está habilitado.</string>
 
     <string name="hidden_apps_title">Aplicaciones ocultas</string>

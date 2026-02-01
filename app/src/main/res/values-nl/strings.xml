@@ -151,7 +151,6 @@
     <string name="automatically_open_keyboard">Toetsenbord automatisch openen</string>
     <string name="automatic_app_opening">Automatisch app openen</string>
     <string name="auto_launch_summary">App automatisch starten wanneer het laatste zoekresultaat</string>
-    <string name="auto_launch_disabled_reason_search">Uitgeschakeld omdat zoeken is uitgeschakeld.</string>
     <string name="auto_launch_disabled_reason_web_search">Uitgeschakeld omdat de webzoekknop is ingeschakeld.</string>
 
     <string name="hidden_apps_title">Verborgen apps</string>
