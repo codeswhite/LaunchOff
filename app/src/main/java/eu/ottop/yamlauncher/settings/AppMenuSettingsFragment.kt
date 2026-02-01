@@ -13,6 +13,9 @@ class AppMenuSettingsFragment : PreferenceFragmentCompat(), TitleProvider { priv
     private var contactPref: SwitchPreference? = null
     private var webSearchPref: SwitchPreference? = null
     private var autoLaunchPref: SwitchPreference? = null
+    private var searchEnabledPref: SwitchPreference? = null
+
+    private var webSearchBaseSummary: CharSequence? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.app_menu_preferences, rootKey)
@@ -23,6 +26,9 @@ class AppMenuSettingsFragment : PreferenceFragmentCompat(), TitleProvider { priv
         contactPref = findPreference("contactsEnabled")
         webSearchPref = findPreference("webSearchEnabled")
         autoLaunchPref = findPreference("autoLaunch")
+        searchEnabledPref = findPreference("searchEnabled")
+
+        webSearchBaseSummary = webSearchPref?.summary
 
         contactPref?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
 
@@ -38,17 +44,27 @@ class AppMenuSettingsFragment : PreferenceFragmentCompat(), TitleProvider { priv
             webSearchPref?.isEnabled = (autoLaunchPref?.isChecked == false)
             autoLaunchPref?.isEnabled = (webSearchPref?.isChecked == false)
             updateAutoLaunchSummary(webSearchPref?.isChecked == true)
+            updateWebSearchSummary(searchEnabledPref?.isChecked == true, autoLaunchPref?.isChecked == true)
             webSearchPref?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 val enabled = newValue as Boolean
                 autoLaunchPref?.isEnabled = !enabled
                 updateAutoLaunchSummary(enabled)
+                updateWebSearchSummary(searchEnabledPref?.isChecked == true, autoLaunchPref?.isChecked == true)
                 return@OnPreferenceChangeListener true
             }
             autoLaunchPref?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                webSearchPref?.isEnabled = !(newValue as Boolean)
+                val enabled = newValue as Boolean
+                webSearchPref?.isEnabled = !enabled
                 updateAutoLaunchSummary(webSearchPref?.isChecked == true)
+                updateWebSearchSummary(searchEnabledPref?.isChecked == true, enabled)
                 return@OnPreferenceChangeListener true
             }
+        }
+
+        searchEnabledPref?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val enabled = newValue as Boolean
+            updateWebSearchSummary(enabled, autoLaunchPref?.isChecked == true)
+            return@OnPreferenceChangeListener true
         }
 
         contextMenuSettings?.onPreferenceClickListener =
@@ -64,6 +80,7 @@ class AppMenuSettingsFragment : PreferenceFragmentCompat(), TitleProvider { priv
     override fun onResume() {
         super.onResume()
         updateAutoLaunchSummary(webSearchPref?.isChecked == true)
+        updateWebSearchSummary(searchEnabledPref?.isChecked == true, autoLaunchPref?.isChecked == true)
     }
 
     private fun updateAutoLaunchSummary(isWebSearchEnabled: Boolean) {
@@ -74,6 +91,23 @@ class AppMenuSettingsFragment : PreferenceFragmentCompat(), TitleProvider { priv
             return
         }
         autoLaunch.summary = "$base\n${getString(R.string.auto_launch_disabled_reason_web_search)}"
+    }
+
+    private fun updateWebSearchSummary(isSearchEnabled: Boolean, isAutoOpenEnabled: Boolean) {
+        val webSearch = webSearchPref ?: return
+
+        // Don't add a redundant note when search itself is disabled.
+        if (!isSearchEnabled) {
+            webSearch.summary = webSearchBaseSummary
+            return
+        }
+
+        if (!isAutoOpenEnabled) {
+            webSearch.summary = webSearchBaseSummary
+            return
+        }
+
+        webSearch.summary = getString(R.string.web_search_disabled_reason_auto_open)
     }
 
     fun setContactPreference(isEnabled: Boolean) {
