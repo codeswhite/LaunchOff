@@ -1123,10 +1123,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val cleanQuery = stringUtils.cleanString(query)
         when (menuView.displayedChild) {
             0 -> {
-                val newFilteredApps = mutableListOf<Triple<LauncherActivityInfo, UserHandle, Int>>()
                 // Always filter from full master list
                 val appsToFilter = installedApps
-                val filteredApps = getFilteredApps(cleanQuery, newFilteredApps, appsToFilter)
+                val filteredApps = getFilteredApps(cleanQuery, appsToFilter)
                 if (filteredApps != null) {
                     applySearchFilter(filteredApps)
                 }
@@ -1142,7 +1141,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private suspend fun getFilteredApps(
         cleanQuery: String?,
-        newFilteredApps: MutableList<Triple<LauncherActivityInfo, UserHandle, Int>>,
         updatedApps: List<Triple<LauncherActivityInfo, UserHandle, Int>>
     ): List<Triple<LauncherActivityInfo, UserHandle, Int>>? {
         if (cleanQuery.isNullOrEmpty()) {
@@ -1152,41 +1150,48 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         } else {
             isSearchActive = true
 
+            val queryLower = cleanQuery.lowercase()
+
             val fuzzyPattern = if (sharedPreferenceManager.isFuzzySearchEnabled()) {
                 stringUtils.getFuzzyPattern(cleanQuery)
             } else {
                 null
             }
 
-            // Use Kotlin's filter method for better performance and readability
-            val filteredList = updatedApps.filter { appItem ->
-                val cleanItemText = stringUtils.cleanString(
-                    sharedPreferenceManager.getAppName(
-                        appItem.first.componentName.flattenToString(),
-                        appItem.third,
-                        appItem.first.label
-                    ).toString()
-                )
-                cleanItemText != null && (
-                    (fuzzyPattern != null && cleanItemText.contains(fuzzyPattern)) ||
-                    cleanItemText.contains(cleanQuery, ignoreCase = true)
-                )
+            data class ScoredApp(
+                val item: Triple<LauncherActivityInfo, UserHandle, Int>,
+                val score: Int,
+                val sortKey: String
+            )
+
+            val scored = updatedApps.mapNotNull { appItem ->
+                val name = sharedPreferenceManager.getAppName(
+                    appItem.first.componentName.flattenToString(),
+                    appItem.third,
+                    appItem.first.label
+                ).toString()
+
+                val cleaned = stringUtils.cleanString(name) ?: return@mapNotNull null
+                val cleanedLower = cleaned.lowercase()
+
+                val fuzzyMatch = fuzzyPattern?.containsMatchIn(cleaned) == true
+                val contains = cleanedLower.contains(queryLower)
+                if (!contains && !fuzzyMatch) return@mapNotNull null
+
+                val score = when {
+                    cleanedLower == queryLower -> 0
+                    cleanedLower.startsWith(queryLower) -> 1
+                    contains -> 2
+                    fuzzyMatch -> 3
+                    else -> 4
+                }
+
+                ScoredApp(appItem, score, cleanedLower)
             }
 
-            // Sort to prioritize exact matches
-            val sortedList = filteredList.sortedWith(compareBy { appItem ->
-                val cleanItemText = stringUtils.cleanString(
-                    sharedPreferenceManager.getAppName(
-                        appItem.first.componentName.flattenToString(),
-                        appItem.third,
-                        appItem.first.label
-                    ).toString()
-                )
-                // Exact match gets 0 (first), non-exact gets 1 (later)
-                if (cleanItemText.equals(cleanQuery, ignoreCase = true)) 0 else 1
-            })
-
-            return sortedList
+            return scored
+                .sortedWith(compareBy<ScoredApp> { it.score }.thenBy { it.sortKey })
+                .map { it.item }
         }
     }
 
