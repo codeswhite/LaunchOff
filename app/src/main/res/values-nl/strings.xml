@@ -100,6 +100,7 @@
     <string name="latest_location">Laatste GPS-locatie</string>
     <string name="set_manual_location">Handmatige locatie instellen</string>
     <string name="find_your_city">"Zoek uw stad"</string>
+    <string name="weather_update_interval">Update-interval</string>
     <string name="units">Eenheden</string>
 
     <string name="shortcuts">Snelkoppelingen</string>
@@ -150,6 +151,8 @@
     <string name="automatically_open_keyboard">Toetsenbord automatisch openen</string>
     <string name="automatic_app_opening">Automatisch app openen</string>
     <string name="auto_launch_summary">App automatisch starten wanneer het laatste zoekresultaat</string>
+    <string name="auto_launch_disabled_reason_search">Uitgeschakeld omdat zoeken is uitgeschakeld.</string>
+    <string name="auto_launch_disabled_reason_web_search">Uitgeschakeld omdat de webzoekknop is ingeschakeld.</string>
 
     <string name="hidden_apps_title">Verborgen apps</string>
     <string name="hidden_apps_text">Verborgen apps beheren</string>

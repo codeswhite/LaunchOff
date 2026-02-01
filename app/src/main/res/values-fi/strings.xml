@@ -96,6 +96,7 @@
     <string name="latest_location">Viimeinen GPS Sijainti</string>
     <string name="set_manual_location">Aseta Manuaalinen Sijainti</string>
     <string name="find_your_city">"Sijaintihaku"</string>
+    <string name="weather_update_interval">Päivitysväli</string>
     <string name="units">Yksiköt</string>
 
     <string name="shortcuts">Pikakuvakkeet</string>
@@ -146,6 +147,8 @@
     <string name="automatically_open_keyboard">Avaa Näppäimistö Automaattisesti</string>
     <string name="automatic_app_opening">Avaa Hakutulos Automaattisesti</string>
     <string name="auto_launch_summary">Avaa sovellus automaattisesti kun se on viimeinen hakutulos</string>
+    <string name="auto_launch_disabled_reason_search">Poistettu käytöstä, koska haku on pois päältä.</string>
+    <string name="auto_launch_disabled_reason_web_search">Poistettu käytöstä, koska verkkohakunappi on käytössä.</string>
 
     <string name="hidden_apps_title">Piilotetut Sovellukset</string>
     <string name="hidden_apps_text">Hallitse Piilotettuja Sovelluksia</string>

@@ -81,6 +81,14 @@
         <item>Очень большой</item>
         <item>Огромный</item>
     </string-array>
+
+    <string-array name="weather_update_interval_options">
+        <item>5 мин</item>
+        <item>10 мин</item>
+        <item>15 мин</item>
+        <item>30 мин</item>
+        <item>60 мин</item>
+    </string-array>
     <!-- Reply Preference -->
     <string-array name="reply_entries">
         <item>Ответить</item>

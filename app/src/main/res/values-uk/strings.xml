@@ -100,6 +100,7 @@
     <string name="latest_location">Останнє місцезнаходження GPS</string>
     <string name="set_manual_location">Встановити місцезнаходження вручну</string>
     <string name="find_your_city">"Знайти ваше місто"</string>
+    <string name="weather_update_interval">Інтервал оновлення</string>
     <string name="units">Одиниці виміру</string>
 
     <string name="shortcuts">Ярлики</string>
@@ -150,6 +151,8 @@
     <string name="automatically_open_keyboard">Автоматично відкривати клавіатуру</string>
     <string name="automatic_app_opening">Автоматичне відкриття додатка</string>
     <string name="auto_launch_summary">Автоматично запускати додаток, коли він є останнім результатом пошуку</string>
+    <string name="auto_launch_disabled_reason_search">Вимкнено, тому що пошук вимкнено.</string>
+    <string name="auto_launch_disabled_reason_web_search">Вимкнено, тому що ввімкнено кнопку веб-пошуку.</string>
 
     <string name="hidden_apps_title">Приховані додатки</string>
     <string name="hidden_apps_text">Керування прихованими додатками</string>

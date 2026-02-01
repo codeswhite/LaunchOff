@@ -81,4 +81,12 @@
         <item>Extra groß</item>
         <item>Riesig</item>
     </string-array>
+
+    <string-array name="weather_update_interval_options">
+        <item>5 Min</item>
+        <item>10 Min</item>
+        <item>15 Min</item>
+        <item>30 Min</item>
+        <item>60 Min</item>
+    </string-array>
 </resources>

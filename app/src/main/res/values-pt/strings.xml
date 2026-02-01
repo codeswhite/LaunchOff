@@ -100,6 +100,7 @@
     <string name="latest_location">Última localização GPS</string>
     <string name="set_manual_location">Definir localização manualmente</string>
     <string name="find_your_city">"Pesquisar sua cidade"</string>
+    <string name="weather_update_interval">Intervalo de atualização</string>
     <string name="units">Unidades</string>
 
     <string name="shortcuts">Atalhos</string>
@@ -150,6 +151,8 @@
     <string name="automatically_open_keyboard">Abrir teclado automaticamente</string>
     <string name="automatic_app_opening">Abertura automática do app</string>
     <string name="auto_launch_summary">Iniciar automaticamente um app quando for o último resultado de pesquisa</string>
+    <string name="auto_launch_disabled_reason_search">Desativado porque a pesquisa está desativada.</string>
+    <string name="auto_launch_disabled_reason_web_search">Desativado porque o botão de pesquisa na web está ativado.</string>
 
     <string name="hidden_apps_title">Apps ocultos</string>
     <string name="hidden_apps_text">Gerenciar apps ocultos</string>

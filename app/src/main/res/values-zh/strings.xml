@@ -100,6 +100,7 @@
     <string name="latest_location">最新的GPS位置</string>
     <string name="set_manual_location">手动设置位置</string>
     <string name="find_your_city">"搜索您的城市"</string>
+    <string name="weather_update_interval">更新间隔</string>
     <string name="units">单位</string>
 
     <string name="shortcuts">快捷方式</string>
@@ -150,6 +151,8 @@
     <string name="automatically_open_keyboard">自动打开键盘</string>
     <string name="automatic_app_opening">自动应用打开</string>
     <string name="auto_launch_summary">当搜索结果只有唯一应用时自动启动</string>
+    <string name="auto_launch_disabled_reason_search">由于搜索已关闭而被禁用。</string>
+    <string name="auto_launch_disabled_reason_web_search">由于已启用网络搜索按钮而被禁用。</string>
 
     <string name="hidden_apps_title">隐藏应用</string>
     <string name="hidden_apps_text">管理隐藏应用</string>

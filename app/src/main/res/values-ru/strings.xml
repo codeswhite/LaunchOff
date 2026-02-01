@@ -100,6 +100,7 @@
     <string name="latest_location">Последнее местоположение GPS</string>
     <string name="set_manual_location">Установить местоположение вручную</string>
     <string name="find_your_city">"Найти ваш город"</string>
+    <string name="weather_update_interval">Интервал обновления</string>
     <string name="units">Единицы измерения</string>
 
     <string name="shortcuts">Ярлыки</string>
@@ -150,6 +151,8 @@
     <string name="automatically_open_keyboard">Автоматически открывать клавиатуру</string>
     <string name="automatic_app_opening">Автоматический запуск приложения</string>
     <string name="auto_launch_summary">Автоматически запускать приложение, когда оно является последним результатом поиска</string>
+    <string name="auto_launch_disabled_reason_search">Отключено, потому что поиск выключен.</string>
+    <string name="auto_launch_disabled_reason_web_search">Отключено, потому что включена кнопка веб-поиска.</string>
 
     <string name="hidden_apps_title">Скрытые приложения</string>
     <string name="hidden_apps_text">Управление скрытыми приложениями</string>
