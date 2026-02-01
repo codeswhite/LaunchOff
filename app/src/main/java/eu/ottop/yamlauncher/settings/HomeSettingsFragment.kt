@@ -3,6 +3,7 @@ package eu.ottop.yamlauncher.settings
 import android.Manifest
 import android.os.Bundle
 import androidx.preference.Preference
+import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import eu.ottop.yamlauncher.R
@@ -20,6 +21,7 @@ class HomeSettingsFragment : PreferenceFragmentCompat(), TitleProvider {
     private var rightSwipePref: Preference? = null
     private var clockApp: Preference? = null
     private var dateApp: Preference? = null
+    private var weatherIntervalPref: EditTextPreference? = null
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.home_preferences, rootKey)
@@ -34,6 +36,7 @@ class HomeSettingsFragment : PreferenceFragmentCompat(), TitleProvider {
             manualLocationPref = findPreference("manualLocation")
             leftSwipePref = findPreference("leftSwipeApp")
             rightSwipePref = findPreference("rightSwipeApp")
+            weatherIntervalPref = findPreference("weatherUpdateInterval")
 
             // Only enable manual location when gps location is disabled
             if (gpsLocationPref != null && manualLocationPref != null) {
@@ -57,6 +60,22 @@ class HomeSettingsFragment : PreferenceFragmentCompat(), TitleProvider {
                     }
             }
 
+            // Normalize weather update interval string (supports free-form: 10m / 6h / 1d)
+            weatherIntervalPref?.let { pref ->
+                val prefs = preferenceManager.sharedPreferences ?: return@let
+                val existing = prefs.getString(pref.key, pref.text)
+                val normalized = normalizeIntervalString(existing)
+                if (normalized != null && normalized != existing) {
+                    prefs.edit().putString(pref.key, normalized).apply()
+                }
+
+                pref.setOnPreferenceChangeListener { _, newValue ->
+                    val normalizedNew = normalizeIntervalString(newValue as? String) ?: "15m"
+                    prefs.edit().putString(pref.key, normalizedNew).apply()
+                    false
+                }
+            }
+
             leftSwipePref?.onPreferenceClickListener =
                 Preference.OnPreferenceClickListener {
                     uiUtils.switchFragment(requireActivity(), GestureAppsFragment("left"))
@@ -76,6 +95,30 @@ class HomeSettingsFragment : PreferenceFragmentCompat(), TitleProvider {
                 Preference.OnPreferenceClickListener {
                     uiUtils.switchFragment(requireActivity(), GestureAppsFragment("date"))
                     true }
+    }
+
+    private fun normalizeIntervalString(raw: String?): String? {
+        val s = raw?.trim()?.lowercase().orEmpty()
+        if (s.isEmpty()) return null
+
+        // Backward compatibility: stored as milliseconds (e.g. 600000)
+        if (s.all { it.isDigit() }) {
+            val ms = s.toLongOrNull() ?: return null
+            val clamped = ms.coerceAtLeast(60_000L)
+            return when {
+                clamped % (24 * 60 * 60_000L) == 0L -> "${clamped / (24 * 60 * 60_000L)}d"
+                clamped % (60 * 60_000L) == 0L -> "${clamped / (60 * 60_000L)}h"
+                else -> "${clamped / 60_000L}m"
+            }
+        }
+
+        val match = Regex("^(\\d+)\\s*([mhd])$").find(s) ?: return null
+        val value = match.groupValues[1].toLongOrNull() ?: return null
+        val unit = match.groupValues[2]
+
+        if (value <= 0L) return null
+
+        return "$value$unit"
     }
 
     override fun onResume() {

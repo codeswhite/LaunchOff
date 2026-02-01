@@ -141,13 +141,11 @@
             app:title="@string/units"
             app:useSimpleSummaryProvider="true" />
 
-        <eu.ottop.yamlauncher.settings.SpinnerPreference
+        <EditTextPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="600000"
+            android:defaultValue="15m"
             app:dependency="weatherEnabled"
-            android:entries="@array/weather_update_interval_options"
-            android:entryValues="@array/weather_update_interval_values"
             app:key="weatherUpdateInterval"
             app:title="@string/weather_update_interval"
             app:useSimpleSummaryProvider="true" />
