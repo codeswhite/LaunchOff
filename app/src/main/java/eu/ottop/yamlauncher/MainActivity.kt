@@ -177,12 +177,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
-        // Task to update the weather every 10 minutes
+        // Task to update the weather periodically
         lifecycleScope.launch(Dispatchers.IO) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 while (true) {
                     updateWeather()
-                    delay(600000)
+                    delay(sharedPreferenceManager.getWeatherUpdateIntervalMs())
                 }
             }
         }

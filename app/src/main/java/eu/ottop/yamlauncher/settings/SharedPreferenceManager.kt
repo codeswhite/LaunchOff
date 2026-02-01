@@ -223,6 +223,42 @@ class SharedPreferenceManager(private val context: Context) {
         return preferences.getString("tempUnits", "celsius")
     }
 
+    fun getWeatherUpdateIntervalMs(): Long {
+        val defaultMs = 15 * 60_000L
+        val raw = preferences.getString("weatherUpdateInterval", "15m")
+        val ms = parseUpdateIntervalMs(raw, defaultMs)
+        return ms.coerceAtLeast(60_000L)
+    }
+
+    private fun parseUpdateIntervalMs(raw: String?, defaultMs: Long): Long {
+        val s = raw?.trim()?.lowercase().orEmpty()
+        if (s.isEmpty()) return defaultMs
+
+        // Convenience: treat bare numbers as minutes.
+        if (s.all { it.isDigit() }) {
+            val minutes = s.toLongOrNull() ?: return defaultMs
+            if (minutes <= 0L) return defaultMs
+            return minutes * 60_000L
+        }
+
+        val match = Regex("^(\\d+)\\s*([mhd])$").find(s) ?: return defaultMs
+        val value = match.groupValues[1].toLongOrNull() ?: return defaultMs
+        if (value <= 0L) return defaultMs
+
+        val multiplier = when (match.groupValues[2]) {
+            "m" -> 60_000L
+            "h" -> 60 * 60_000L
+            "d" -> 24 * 60 * 60_000L
+            else -> return defaultMs
+        }
+
+        return try {
+            Math.multiplyExact(value, multiplier)
+        } catch (_: ArithmeticException) {
+            Long.MAX_VALUE
+        }
+    }
+
     fun isClockGestureEnabled(): Boolean {
         return preferences.getBoolean("clockClick", true)
     }
