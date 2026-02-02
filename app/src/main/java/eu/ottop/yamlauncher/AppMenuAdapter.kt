@@ -214,4 +214,10 @@ class AppMenuAdapter(
         apps = newApps.toMutableList()
         diffResult.dispatchUpdatesTo(this)
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setApps(newApps: List<Triple<LauncherActivityInfo, UserHandle, Int>>) {
+        apps = newApps.toMutableList()
+        notifyDataSetChanged()
+    }
 }
