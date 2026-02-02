@@ -41,6 +41,11 @@ class AppMenuSettingsFragment : PreferenceFragmentCompat(), TitleProvider { priv
         }
 
         if (webSearchPref != null && autoLaunchPref != null) {
+            // A restored/migrated preference state can end up with both enabled; normalize so settings can't get stuck.
+            if (webSearchPref?.isChecked == true && autoLaunchPref?.isChecked == true) {
+                autoLaunchPref?.isChecked = false
+            }
+
             webSearchPref?.isEnabled = (autoLaunchPref?.isChecked == false)
             autoLaunchPref?.isEnabled = (webSearchPref?.isChecked == false)
             updateAutoLaunchSummary(webSearchPref?.isChecked == true)
@@ -95,6 +100,7 @@ class AppMenuSettingsFragment : PreferenceFragmentCompat(), TitleProvider { priv
 
     private fun updateWebSearchSummary(isSearchEnabled: Boolean, isAutoOpenEnabled: Boolean) {
         val webSearch = webSearchPref ?: return
+        val base = webSearchBaseSummary?.toString()?.trim().orEmpty()
 
         // Don't add a redundant note when search itself is disabled.
         if (!isSearchEnabled) {
@@ -107,7 +113,8 @@ class AppMenuSettingsFragment : PreferenceFragmentCompat(), TitleProvider { priv
             return
         }
 
-        webSearch.summary = getString(R.string.web_search_disabled_reason_auto_open)
+        val reason = getString(R.string.web_search_disabled_reason_auto_open)
+        webSearch.summary = if (base.isEmpty()) reason else "$base\n$reason"
     }
 
     fun setContactPreference(isEnabled: Boolean) {
