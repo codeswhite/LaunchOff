@@ -20,9 +20,19 @@ import eu.ottop.yamlauncher.databinding.ActivitySettingsBinding
 import eu.ottop.yamlauncher.utils.Logger
 import eu.ottop.yamlauncher.utils.PermissionUtils
 import eu.ottop.yamlauncher.utils.UIUtils
+import org.json.JSONArray
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private companion object {
+        private const val BACKUP_SCHEMA_VERSION = 2
+        private const val BACKUP_FILE_BASENAME = "yamlauncher_backup"
+        private const val TRANSIENT_PREF_KEY_RESTORED = "isRestored"
+    }
 
     private val permissionUtils = PermissionUtils()
 
@@ -109,10 +119,11 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     }
 
     fun createBackup() {
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
         val createFileIntent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "application/json"
-            putExtra(Intent.EXTRA_TITLE, "yamlauncher_backup.json")
+            putExtra(Intent.EXTRA_TITLE, "${BACKUP_FILE_BASENAME}_$timestamp.json")
         }
         performBackup.launch(createFileIntent)
     }
@@ -122,8 +133,11 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
 
         val backupData = JSONObject().apply {
             put("app_id", application.packageName)
+            put("schema_version", BACKUP_SCHEMA_VERSION)
+            put("created_at", SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US).format(Date()))
             val data = JSONObject()
             for ((key, value) in allEntries) {
+                if (key == TRANSIENT_PREF_KEY_RESTORED) continue
                 val entry = JSONObject().apply {
                     when (value) {
                         is String -> put("value", value).put("type", "String")
@@ -131,8 +145,15 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
                         is Boolean -> put("value", value).put("type", "Boolean")
                         is Long -> put("value", value).put("type", "Long")
                         is Float -> put("value", value).put("type", "Float")
+                        is Set<*> -> {
+                            val values = value.filterIsInstance<String>()
+                            if (values.size != value.size) return@apply
+                            put("value", JSONArray(values)).put("type", "StringSet")
+                        }
+                        else -> return@apply
                     }
                 }
+                if (!entry.has("type")) continue
                 data.put(key, entry)
             }
             put("data", data)
@@ -142,7 +163,7 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
 
         try {
             contentResolver.openOutputStream(uri)?.use { outputStream ->
-                outputStream.write(sharedPreferencesText.toByteArray())
+                outputStream.write(sharedPreferencesText.toByteArray(Charsets.UTF_8))
             }
             logger.i("SettingsActivity", "Settings backup created successfully")
             Toast.makeText(this, getString(R.string.backup_success), Toast.LENGTH_SHORT).show()
@@ -168,16 +189,21 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
                 if (backupData.getString("app_id") != application.packageName) {
                     throw IllegalArgumentException(getString(R.string.restore_wrong_app))
                 }
+
+                val schemaVersion = backupData.optInt("schema_version", 1)
                 val data = backupData.getJSONObject("data")
 
-                val editor = preferences.edit()
+                val editor = preferences.edit().clear()
 
                 val keys = data.keys()
 
                 while (keys.hasNext()){
                     val key = keys.next()
                     val entry = data.getJSONObject(key)
-                    val type = entry.getString("type")
+                    val type = entry.optString("type", "")
+                    if (type.isEmpty()) {
+                        continue
+                    }
 
                     when (type) {
                         "String" -> editor.putString(key, entry.getString("value"))
@@ -185,9 +211,20 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
                         "Boolean" -> editor.putBoolean(key, entry.getBoolean("value"))
                         "Long" -> editor.putLong(key, entry.getLong("value"))
                         "Float" -> editor.putFloat(key, entry.getDouble("value").toFloat())
+                        "StringSet" -> {
+                            if (schemaVersion >= 2) {
+                                val array = entry.getJSONArray("value")
+                                val set = mutableSetOf<String>()
+                                for (i in 0 until array.length()) {
+                                    set.add(array.getString(i))
+                                }
+                                editor.putStringSet(key, set)
+                            }
+                        }
+                        else -> {}
                     }
                 }
-                editor.putBoolean("isRestored", true)
+                editor.putBoolean(TRANSIENT_PREF_KEY_RESTORED, true)
 
                 editor.apply()
 
@@ -207,7 +244,7 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
 
     private fun readJsonFile(uri: Uri): String? {
         return try {
-            contentResolver.openInputStream(uri)?.bufferedReader().use { reader ->
+            contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8).use { reader ->
                 reader?.readText()
             }
         } catch (e: Exception) {
