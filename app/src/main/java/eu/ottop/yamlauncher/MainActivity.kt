@@ -792,7 +792,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     rightSwipeActivity = gestureUtils.getSwipeInfo(launcherApps, "right")
                 }
 
-                "doubleTapSwipe" -> {
+                "doubleTapAction" -> {
                     doubleTapApp = gestureUtils.getSwipeInfo(launcherApps, "doubleTap")
                 }
 
@@ -1613,18 +1613,26 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         override fun onDoubleTap(e: MotionEvent): Boolean {
             if (sharedPreferenceManager.isDoubleTapEnabled()) {
-                if (sharedPreferenceManager.isGestureEnabled("doubleTap") && doubleTapApp.first != null && doubleTapApp.second != null) {
-                    appUtils.launchApp(doubleTapApp.first!!.componentName, launcherApps.profiles[doubleTapApp.second!!])
-                } else {
-                    if (gestureUtils.isAccessibilityServiceEnabled(
-                            ScreenLockService::class.java
-                        )
-                    ) {
-                        val intent = Intent(this@MainActivity, ScreenLockService::class.java)
-                        intent.action = "LOCK_SCREEN"
-                        startService(intent)
-                    } else {
-                        gestureUtils.promptEnableAccessibility()
+                when (sharedPreferenceManager.getDoubleTapAction()) {
+                    "app" -> {
+                        if (doubleTapApp.first != null && doubleTapApp.second != null) {
+                            appUtils.launchApp(doubleTapApp.first!!.componentName, launcherApps.profiles[doubleTapApp.second!!])
+                        } else {
+                            Toast.makeText(this@MainActivity, getString(R.string.launch_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    else -> {
+                        if (gestureUtils.isAccessibilityServiceEnabled(
+                                ScreenLockService::class.java
+                            )
+                        ) {
+                            val intent = Intent(this@MainActivity, ScreenLockService::class.java)
+                            intent.action = "LOCK_SCREEN"
+                            startService(intent)
+                        } else {
+                            gestureUtils.promptEnableAccessibility()
+                        }
                     }
                 }
             }

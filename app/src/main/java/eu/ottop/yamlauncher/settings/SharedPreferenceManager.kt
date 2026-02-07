@@ -291,6 +291,20 @@ class SharedPreferenceManager(private val context: Context) {
         return preferences.getBoolean("doubleTap", false)
     }
 
+    fun getDoubleTapAction(): String {
+        val action = preferences.getString("doubleTapAction", null)
+        if (action != null) {
+            return action
+        }
+
+        val migratedAction = if (preferences.getBoolean("doubleTapSwipe", false)) "app" else "lock"
+        preferences.edit {
+            putString("doubleTapAction", migratedAction)
+            remove("doubleTapSwipe")
+        }
+        return migratedAction
+    }
+
     // Application Menu
     fun getAppAlignment(): String? {
         return preferences.getString("appMenuAlignment", "left")

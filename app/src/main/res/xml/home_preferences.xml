@@ -252,22 +252,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
-            android:title="@string/double_tap_to_lock_screen"
+            android:title="@string/double_tap"
             app:key="doubleTap" />
-        <SwitchPreference
+        <eu.ottop.yamlauncher.settings.SpinnerPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:title="@string/custom_double_tap_gesture"
+            android:defaultValue="lock"
+            android:entries="@array/double_tap_action_options"
+            android:entryValues="@array/double_tap_action_values"
+            android:title="@string/double_tap_action"
             app:dependency="doubleTap"
-            app:key="doubleTapSwipe" />
+            app:key="doubleTapAction"
+            app:useSimpleSummaryProvider="true" />
         <Preference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:dependency="doubleTapSwipe"
+            app:dependency="doubleTap"
             app:key="doubleTapSwipeApp"
             app:selectable="true"
-            app:title="@string/set_double_tap_app" />
+            app:title="@string/double_tap_app" />
     </PreferenceCategory>
 
 </PreferenceScreen>
