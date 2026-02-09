@@ -18,64 +18,95 @@ class HomeSettingsFragment : PreferenceFragmentCompat(), TitleProvider {
     private var manualLocationPref: Preference? = null
     private var leftSwipePref: Preference? = null
     private var rightSwipePref: Preference? = null
+    private var doubleTapTogglePref: SwitchPreference? = null
+    private var doubleTapActionPref: Preference? = null
+    private var doubleTapAppPref: Preference? = null
     private var clockApp: Preference? = null
     private var dateApp: Preference? = null
 
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.home_preferences, rootKey)
-            val uiUtils = UIUtils(requireContext())
+        val uiUtils = UIUtils(requireContext())
 
-            sharedPreferenceManager = SharedPreferenceManager(requireContext())
+        sharedPreferenceManager = SharedPreferenceManager(requireContext())
 
-            clockApp = findPreference("clockSwipeApp")
-            dateApp = findPreference("dateSwipeApp")
+        clockApp = findPreference("clockSwipeApp")
+        dateApp = findPreference("dateSwipeApp")
 
-            gpsLocationPref = findPreference("gpsLocation")
-            manualLocationPref = findPreference("manualLocation")
-            leftSwipePref = findPreference("leftSwipeApp")
-            rightSwipePref = findPreference("rightSwipeApp")
+        gpsLocationPref = findPreference("gpsLocation")
+        manualLocationPref = findPreference("manualLocation")
+        leftSwipePref = findPreference("leftSwipeApp")
+        rightSwipePref = findPreference("rightSwipeApp")
+        doubleTapTogglePref = findPreference("doubleTap")
+        doubleTapActionPref = findPreference("doubleTapAction")
+        doubleTapAppPref = findPreference("doubleTapSwipeApp")
 
-            // Only enable manual location when gps location is disabled
-            if (gpsLocationPref != null && manualLocationPref != null) {
-                manualLocationPref?.isEnabled = (gpsLocationPref?.isChecked == false)
+        // Only enable manual location when gps location is disabled
+        if (gpsLocationPref != null && manualLocationPref != null) {
+            manualLocationPref?.isEnabled = gpsLocationPref?.isChecked == false
 
-                gpsLocationPref?.onPreferenceChangeListener =
-                    Preference.OnPreferenceChangeListener { _, newValue ->
-                        if (newValue as Boolean && !permissionUtils.hasPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                            (requireActivity() as SettingsActivity).requestLocationPermission()
-                            return@OnPreferenceChangeListener false
-                        } else {
-                            manualLocationPref?.isEnabled = !newValue
-                            return@OnPreferenceChangeListener true
-                        }
+            gpsLocationPref?.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { _, newValue ->
+                    if (newValue as Boolean && !permissionUtils.hasPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        (requireActivity() as SettingsActivity).requestLocationPermission()
+                        return@OnPreferenceChangeListener false
+                    } else {
+                        manualLocationPref?.isEnabled = !newValue
+                        return@OnPreferenceChangeListener true
                     }
+                }
 
-                manualLocationPref?.onPreferenceClickListener =
-                    Preference.OnPreferenceClickListener {
-                        uiUtils.switchFragment(requireActivity(), LocationFragment())
-                        true
-                    }
+            manualLocationPref?.onPreferenceClickListener =
+                Preference.OnPreferenceClickListener {
+                    uiUtils.switchFragment(requireActivity(), LocationFragment())
+                    true
+                }
+        }
+
+        leftSwipePref?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                uiUtils.switchFragment(requireActivity(), GestureAppsFragment("left"))
+                true
             }
 
-            leftSwipePref?.onPreferenceClickListener =
-                Preference.OnPreferenceClickListener {
-                    uiUtils.switchFragment(requireActivity(), GestureAppsFragment("left"))
-                    true }
+        rightSwipePref?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                uiUtils.switchFragment(requireActivity(), GestureAppsFragment("right"))
+                true
+            }
 
-            rightSwipePref?.onPreferenceClickListener =
-                Preference.OnPreferenceClickListener {
-                    uiUtils.switchFragment(requireActivity(), GestureAppsFragment("right"))
-                    true }
+        doubleTapTogglePref?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValue ->
+                val launchesApp = sharedPreferenceManager.getDoubleTapAction() == "app"
+                doubleTapAppPref?.isEnabled = (newValue as Boolean) && launchesApp
+                true
+            }
 
-            clockApp?.onPreferenceClickListener =
-                Preference.OnPreferenceClickListener {
-                    uiUtils.switchFragment(requireActivity(), GestureAppsFragment("clock"))
-                    true }
+        doubleTapActionPref?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValue ->
+                doubleTapAppPref?.isEnabled = (doubleTapTogglePref?.isChecked == true) && (newValue as String == "app")
+                true
+            }
 
-            dateApp?.onPreferenceClickListener =
-                Preference.OnPreferenceClickListener {
-                    uiUtils.switchFragment(requireActivity(), GestureAppsFragment("date"))
-                    true }
+        doubleTapAppPref?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                uiUtils.switchFragment(requireActivity(), GestureAppsFragment("doubleTap"))
+                true
+            }
+
+        clockApp?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                uiUtils.switchFragment(requireActivity(), GestureAppsFragment("clock"))
+                true
+            }
+
+        dateApp?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                uiUtils.switchFragment(requireActivity(), GestureAppsFragment("date"))
+                true
+            }
+
+        updateDoubleTapAppPreferenceState()
     }
 
     override fun onResume() {
@@ -89,6 +120,16 @@ class HomeSettingsFragment : PreferenceFragmentCompat(), TitleProvider {
         leftSwipePref?.summary = sharedPreferenceManager.getGestureName("left")
 
         rightSwipePref?.summary = sharedPreferenceManager.getGestureName("right")
+
+        doubleTapAppPref?.summary = sharedPreferenceManager.getGestureName("doubleTap")
+
+        updateDoubleTapAppPreferenceState()
+    }
+
+    private fun updateDoubleTapAppPreferenceState() {
+        val launchesApp = sharedPreferenceManager.getDoubleTapAction() == "app"
+        val isDoubleTapEnabled = doubleTapTogglePref?.isChecked == true
+        doubleTapAppPref?.isEnabled = isDoubleTapEnabled && launchesApp
     }
 
     override fun getTitle(): String {
