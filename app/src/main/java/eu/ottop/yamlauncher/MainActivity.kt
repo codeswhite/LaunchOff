@@ -173,6 +173,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private val handler = Handler(Looper.getMainLooper())
 
+    private enum class ScreenState {
+        HOME,
+        APP_MENU,
+    }
+
+    private var screenState: ScreenState = ScreenState.HOME
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -416,8 +423,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         } catch (_: UninitializedPropertyAccessException) {
         }
-        animations.showApps(binding.homeView, binding.appView)
-        animations.backgroundIn(this@MainActivity)
+        navigateToScreen(ScreenState.APP_MENU)
         if (sharedPreferenceManager.isAutoKeyboardEnabled()) {
             isInitialOpen = true
             val imm =
@@ -654,6 +660,27 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
+    private fun navigateToScreen(target: ScreenState, homeAnimDuration: Long = sharedPreferenceManager.getAnimationSpeed()) {
+        // Home renders are intentionally idempotent (and sometimes forced with 0ms on resume)
+        // to recover from interrupted/stale animation states.
+        if (target == ScreenState.APP_MENU && target == screenState && !animations.isInAnim) {
+            return
+        }
+
+        when (target) {
+            ScreenState.HOME -> {
+                animations.showHome(binding.homeView, binding.appView, homeAnimDuration)
+                animations.backgroundOut(this@MainActivity, homeAnimDuration)
+            }
+            ScreenState.APP_MENU -> {
+                animations.showApps(binding.homeView, binding.appView)
+                animations.backgroundIn(this@MainActivity)
+            }
+        }
+
+        screenState = target
+    }
+
     private fun openAppMenu() {
         appAdapter?.shortcutTextView = null
         contactAdapter?.shortcutTextView = null
@@ -867,8 +894,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         isSearchActive = false
 
         closeKeyboard()
-        animations.showHome(binding.homeView, binding.appView, animSpeed)
-        animations.backgroundOut(this@MainActivity, animSpeed)
+        navigateToScreen(ScreenState.HOME, animSpeed)
 
         // Single delayed operation - no 50ms gaps
         handler.postDelayed({
