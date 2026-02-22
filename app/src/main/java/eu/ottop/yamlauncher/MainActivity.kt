@@ -663,18 +663,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private fun navigateToScreen(target: ScreenState, homeAnimDuration: Long = sharedPreferenceManager.getAnimationSpeed()) {
         // Home renders are intentionally idempotent (and sometimes forced with 0ms on resume)
         // to recover from interrupted/stale animation states.
-        if (target == ScreenState.APP_MENU && target == screenState && !animations.isInAnim) {
-            return
-        }
+        val isAlreadyThere = target == screenState && !animations.isInAnim
+        val duration = if (isAlreadyThere) 0L else homeAnimDuration
 
         when (target) {
             ScreenState.HOME -> {
-                animations.showHome(binding.homeView, binding.appView, homeAnimDuration)
-                animations.backgroundOut(this@MainActivity, homeAnimDuration)
+                animations.showHome(binding.homeView, binding.appView, duration)
+                animations.backgroundOut(this@MainActivity, duration)
             }
             ScreenState.APP_MENU -> {
-                animations.showApps(binding.homeView, binding.appView)
-                animations.backgroundIn(this@MainActivity)
+                animations.showApps(binding.homeView, binding.appView, duration)
+                animations.backgroundIn(this@MainActivity, duration)
             }
         }
 
@@ -1311,6 +1310,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
         if (returnAllowed) {
             backToHome(0)
+        } else {
+            // Some external flows intentionally suppress the automatic return-to-home.
+            // Still re-apply the current screen state with 0ms to avoid getting stuck in a blank UI.
+            closeKeyboard()
+            navigateToScreen(screenState, 0)
         }
         returnAllowed = true
         appAdapter?.notifyDataSetChanged()

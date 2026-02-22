@@ -103,13 +103,27 @@ class Animations(context: Context) {
             })
     }
 
-    fun showApps(homeView: View, appView: View) {
+    fun showApps(homeView: View, appView: View, duration: Long = sharedPreferenceManager.getAnimationSpeed()) {
         transitionToken += 1
         val token = transitionToken
-        val duration = sharedPreferenceManager.getAnimationSpeed()
 
         cancelViewAnimation(homeView)
         cancelViewAnimation(appView)
+
+        if (duration <= 0L) {
+            appView.visibility = View.VISIBLE
+            appView.alpha = 1f
+            appView.translationY = 0f
+            appView.scaleY = 1f
+
+            homeView.visibility = View.INVISIBLE
+            homeView.alpha = 0f
+            homeView.translationY = -homeView.height.toFloat() / 100
+            homeView.scaleY = 1f
+
+            isInAnim = false
+            return
+        }
 
         isInAnim = true
 
@@ -169,19 +183,23 @@ class Animations(context: Context) {
             })
     }
 
-    fun backgroundIn(activity: Activity) {
+    fun backgroundIn(activity: Activity, duration: Long = sharedPreferenceManager.getAnimationSpeed()) {
         val originalColor = sharedPreferenceManager.getBgColor()
 
         // Only animate darkness onto the transparent background
         if (originalColor == Color.parseColor("#00000000")) {
             val newColor = Color.parseColor("#3F000000")
 
+            if (duration <= 0L) {
+                activity.window.decorView.setBackgroundColor(newColor)
+                return
+            }
+
             val backgroundColorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), originalColor, newColor)
             backgroundColorAnimator.addUpdateListener { animator ->
                 activity.window.decorView.setBackgroundColor(animator.animatedValue as Int)
             }
 
-            val duration = sharedPreferenceManager.getAnimationSpeed()
             backgroundColorAnimator.duration = duration
 
             backgroundColorAnimator.start()
@@ -194,6 +212,11 @@ class Animations(context: Context) {
         // Only animate darkness onto the transparent background
         if (newColor == Color.parseColor("#00000000")) {
             val originalColor = Color.parseColor("#3F000000")
+
+            if (duration <= 0L) {
+                activity.window.decorView.setBackgroundColor(newColor)
+                return
+            }
 
             val backgroundColorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), originalColor, newColor)
             backgroundColorAnimator.addUpdateListener { animator ->
